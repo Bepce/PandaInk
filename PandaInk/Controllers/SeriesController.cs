@@ -20,7 +20,27 @@ namespace PandaInk.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Series>>> GetSeries()
         {
-            return await _context.Series.ToListAsync();
+            var series = await _context.Series
+                .Include(s => s.Reviews)
+                .ToListAsync();
+
+            return Ok(series);
+        }
+
+        // GET: api/series/{id}
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Series>> GetSeries(Guid id)
+        {
+            var series = await _context.Series
+                .Include(s => s.Reviews)
+                .FirstOrDefaultAsync(s => s.Id == id);
+
+            if (series == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(series);
         }
     }
 }
