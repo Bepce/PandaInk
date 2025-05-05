@@ -17,11 +17,11 @@ namespace PandaInk.API.Controllers
         }
 
         // GET: api/review/{seriesId}
-        [HttpGet("/reviews/{id}")]
-        public async Task<ActionResult<Review>> GetReview(string id)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Review>> GetReview([FromRoute]Guid id)
         {
             var review = await _context.Reviews
-                .Where(r => r.SeriesId.ToString() == id)
+                .Where(r => r.SeriesId == id)
                 .Select(r => r.ToReviewDTO())
                 .ToListAsync();
 
@@ -35,11 +35,11 @@ namespace PandaInk.API.Controllers
 
         // POST: api/review
         [HttpPost]
-        public async Task<ActionResult> CreateReview([FromBody] CreateReviewDTO reviewDTO)
+        public async Task<IActionResult> CreateReview([FromBody] CreateReviewDTO reviewDTO)
         {
             var reviewModel = reviewDTO.ToReviewFromCreateReviewDTO();
 
-            _context.Reviews.Add(reviewModel);
+            await _context.Reviews.AddAsync(reviewModel);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetReview), new { id = reviewModel.SeriesId });
