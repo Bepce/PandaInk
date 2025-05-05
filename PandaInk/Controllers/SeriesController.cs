@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PandaInk.API.Data;
+using PandaInk.API.DTOs.Review;
 using PandaInk.API.Mappers;
 using PandaInk.API.Models;
 
@@ -42,7 +43,7 @@ namespace PandaInk.API.Controllers
                 return NotFound();
             }
 
-            return Ok(series.ToSeriesDTO());
+             return Ok(series.ToSeriesDTO());
         }
     }
 }
