@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PandaInk.API.Data;
+using PandaInk.API.Mappers;
 using PandaInk.API.Models;
 
 namespace PandaInk.API.Controllers
@@ -22,6 +23,7 @@ namespace PandaInk.API.Controllers
         {
             var series = await _context.Series
                 .Include(s => s.Reviews)
+                .Select(s => s.ToSeriesDTO())
                 .ToListAsync();
 
             return Ok(series);
@@ -40,7 +42,7 @@ namespace PandaInk.API.Controllers
                 return NotFound();
             }
 
-            return Ok(series);
+            return Ok(series.ToSeriesDTO());
         }
     }
 }

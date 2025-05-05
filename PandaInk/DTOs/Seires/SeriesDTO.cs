@@ -12,6 +12,6 @@
 
         public string? Author { get; set; }
 
-        public DateTime ReleaseDate { get; set; }
+        public DateTime? ReleaseDate { get; set; }
     }
 }
