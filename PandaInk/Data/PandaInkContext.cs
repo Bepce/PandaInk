@@ -7,7 +7,7 @@ namespace PandaInk.API.Data
     {
         public PandaInkContext(DbContextOptions<PandaInkContext> options) : base(options)
         {
-
+            
         }
 
         public DbSet<Series> Series { get; set; } = null!;

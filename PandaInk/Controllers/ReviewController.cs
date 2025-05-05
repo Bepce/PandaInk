@@ -7,6 +7,8 @@ using PandaInk.API.Models;
 
 namespace PandaInk.API.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class ReviewController : ControllerBase
     {
         private readonly PandaInkContext _context;
@@ -39,10 +41,10 @@ namespace PandaInk.API.Controllers
         {
             var reviewModel = reviewDTO.ToReviewFromCreateReviewDTO();
 
-            await _context.Reviews.AddAsync(reviewModel);
+            _context.Reviews.Add(reviewModel);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetReview), new { id = reviewModel.SeriesId });
+            return CreatedAtAction(nameof(GetReview), new { id = reviewModel.Id });
         }
     }
 }

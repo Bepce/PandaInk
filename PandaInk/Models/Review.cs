@@ -14,6 +14,6 @@ namespace PandaInk.API.Models
 
         public Guid SeriesId { get; set; }
 
-        public Series Series { get; set; } = new Series();
+        public Series Series { get; set; }
     }
 }

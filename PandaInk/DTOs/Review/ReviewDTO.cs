@@ -6,6 +6,7 @@ namespace PandaInk.API.DTOs.Review
     public class ReviewDTO
     {
         public Guid Id { get; set; }
+
         public string Content { get; set; } = string.Empty;
 
         public RatingEnum Rating { get; set; }
