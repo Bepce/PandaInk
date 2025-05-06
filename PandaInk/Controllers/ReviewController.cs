@@ -52,7 +52,7 @@ namespace PandaInk.API.Controllers
                 return BadRequest();
             }
 
-            _context.Reviews.Add(reviewModel);
+            await _context.Reviews.AddAsync(reviewModel);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetReview), new { id = seriesId }, reviewDTO);
@@ -73,7 +73,6 @@ namespace PandaInk.API.Controllers
             review.Content = reviewDTO.Content;
             review.Rating = reviewDTO.Rating;
 
-            _context.Entry(review).State = EntityState.Modified;
             await _context.SaveChangesAsync();
 
             return Ok(review.ToReviewDTO());
