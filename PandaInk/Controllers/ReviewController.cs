@@ -67,5 +67,23 @@ namespace PandaInk.API.Controllers
 
             return Ok(review.ToReviewDTO());
         }
+
+        // DELETE: api/review/{id}
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<IActionResult> DeleteReview([FromRoute] Guid id)
+        {
+            var review = await _context.Reviews.FindAsync(id);
+
+            if (review == null)
+            {
+                return NotFound();
+            }
+
+            _context.Reviews.Remove(review);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
     }
 }
