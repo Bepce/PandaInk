@@ -41,10 +41,21 @@ namespace PandaInk.API.Controllers
         {
             var reviewModel = reviewDTO.ToReviewFromCreateReviewDTO();
 
+            var seriesId = await _context.Series
+                .Where(s => s.Id == reviewDTO.SeriesId)
+                .Select(s => s.Id)
+                .FirstOrDefaultAsync();
+
+
+            if(seriesId == Guid.Empty)
+            {
+                return BadRequest();
+            }
+
             _context.Reviews.Add(reviewModel);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetReview), new { id = reviewModel.Id });
+            return CreatedAtAction(nameof(GetReview), new { id = seriesId }, reviewDTO);
         }
 
         // PUT: api/review/{id}
