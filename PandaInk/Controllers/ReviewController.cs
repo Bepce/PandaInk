@@ -2,8 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 using PandaInk.API.Data;
 using PandaInk.API.DTOs.Review;
+using PandaInk.API.Interfaces;
 using PandaInk.API.Mappers;
 using PandaInk.API.Models;
+using System.Runtime.InteropServices;
 
 namespace PandaInk.API.Controllers
 {
@@ -12,22 +14,21 @@ namespace PandaInk.API.Controllers
     public class ReviewController : ControllerBase
     {
         private readonly PandaInkContext _context;
+        private readonly IReviewRepository _reviewRepository;
 
-        public ReviewController(PandaInkContext context)
+        public ReviewController(PandaInkContext context, IReviewRepository reviewRepo)
         {
             _context = context;
+            _reviewRepository = reviewRepo;
         }
 
         // GET: api/review/{seriesId}
         [HttpGet("{id}")]
         public async Task<ActionResult<Review>> GetReview([FromRoute] Guid id)
         {
-            var review = await _context.Reviews
-                .Where(r => r.SeriesId == id)
-                .Select(r => r.ToReviewDTO())
-                .ToListAsync();
+            var review = await _reviewRepository.GetReviewsBySeriesIdAsync(id);
 
-            if (review.Count == 0)
+            if (review == null)
             {
                 return NotFound();
             }
@@ -46,14 +47,12 @@ namespace PandaInk.API.Controllers
                 .Select(s => s.Id)
                 .FirstOrDefaultAsync();
 
-
             if(seriesId == Guid.Empty)
             {
                 return BadRequest();
             }
 
-            await _context.Reviews.AddAsync(reviewModel);
-            await _context.SaveChangesAsync();
+            await _reviewRepository.CreateReviewAsync(reviewModel);
 
             return CreatedAtAction(nameof(GetReview), new { id = seriesId }, reviewDTO);
         }
@@ -63,17 +62,12 @@ namespace PandaInk.API.Controllers
         [Route("{id}")]
         public async Task<IActionResult> UpdateReview([FromRoute] Guid id, [FromBody] UpdateReviewDTO reviewDTO)
         {
-            var review = await _context.Reviews.FindAsync(id);
+            var review = await _reviewRepository.UpdateReviewAsync(reviewDTO);
 
             if (review == null)
             {
                 return NotFound();
             }
-
-            review.Content = reviewDTO.Content;
-            review.Rating = reviewDTO.Rating;
-
-            await _context.SaveChangesAsync();
 
             return Ok(review.ToReviewDTO());
         }
@@ -83,15 +77,12 @@ namespace PandaInk.API.Controllers
         [Route("{id}")]
         public async Task<IActionResult> DeleteReview([FromRoute] Guid id)
         {
-            var review = await _context.Reviews.FindAsync(id);
+            var review = await _reviewRepository.DeleteReviewAsync(id);
 
             if (review == null)
             {
                 return NotFound();
             }
-
-            _context.Reviews.Remove(review);
-            await _context.SaveChangesAsync();
 
             return NoContent();
         }

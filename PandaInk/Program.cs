@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using PandaInk.API.Data;
+using PandaInk.API.Interfaces;
+using PandaInk.API.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +15,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<PandaInkContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("PandaInkContext")));
+builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 
 var app = builder.Build();
 
