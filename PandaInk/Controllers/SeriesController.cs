@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using PandaInk.API.Data;
 using PandaInk.API.DTOs.Review;
+using PandaInk.API.Helpers;
 using PandaInk.API.Interfaces;
 using PandaInk.API.Mappers;
 using PandaInk.API.Models;
@@ -24,9 +25,9 @@ namespace PandaInk.API.Controllers
 
         // GET: api/series
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Series>>> GetSeries()
+        public async Task<ActionResult<IEnumerable<Series>>> GetSeries([FromQuery] QueryObject query)
         {
-            var series = await _seriesRepository.GetAllSeriesAsync();
+            var series = await _seriesRepository.GetAllSeriesAsync(query);
 
             return Ok(series);
         }

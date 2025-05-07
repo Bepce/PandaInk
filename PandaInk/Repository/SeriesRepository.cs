@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PandaInk.API.Data;
 using PandaInk.API.DTOs.Seires;
+using PandaInk.API.Helpers;
 using PandaInk.API.Interfaces;
 using PandaInk.API.Mappers;
 
@@ -13,12 +14,18 @@ namespace PandaInk.API.Repository
         {
             _context = context;
         }
-        public async Task<IEnumerable<SeriesDTO>> GetAllSeriesAsync()
+        public async Task<IEnumerable<SeriesDTO>> GetAllSeriesAsync(QueryObject query)
         {
-             return await _context.Series
-                .Include(s => s.Reviews)
-                .Select(s => s.ToSeriesDTO())
-                .ToListAsync();
+            var series = _context.Series
+                .Include(s => s.Reviews)               
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(query.Title))
+            {
+                series = series.Where(s => s.Title.ToLower().Contains(query.Title.ToLower()));
+            }
+
+            return await series.Select(s => s.ToSeriesDTO()).ToListAsync();
         }
 
         public async Task<SeriesDTO?> GetSeriesByIdAsync(Guid id)
