@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using PandaInk.API.Data;
 using PandaInk.API.DTOs.Review;
+using PandaInk.API.Interfaces;
 using PandaInk.API.Mappers;
 using PandaInk.API.Models;
 
@@ -12,20 +13,20 @@ namespace PandaInk.API.Controllers
     public class SeriesController : ControllerBase
     {
         private readonly PandaInkContext _context;
+        private readonly ISeriesRepository _seriesRepository;
 
-        public SeriesController(PandaInkContext context)
+        public SeriesController(PandaInkContext context, ISeriesRepository seriesRepo)
         {
             _context = context;
+            _seriesRepository = seriesRepo;
+
         }
 
         // GET: api/series
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Series>>> GetSeries()
         {
-            var series = await _context.Series
-                .Include(s => s.Reviews)
-                .Select(s => s.ToSeriesDTO())
-                .ToListAsync();
+            var series = await _seriesRepository.GetAllSeriesAsync();
 
             return Ok(series);
         }
@@ -34,16 +35,14 @@ namespace PandaInk.API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Series>> GetSeries(Guid id)
         {
-            var series = await _context.Series
-                .Include(s => s.Reviews)
-                .FirstOrDefaultAsync(s => s.Id == id);
+            var series = await _seriesRepository.GetSeriesByIdAsync(id);
 
             if (series == null)
             {
                 return NotFound();
             }
 
-             return Ok(series.ToSeriesDTO());
+             return Ok(series);
         }
     }
 }

@@ -16,6 +16,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<PandaInkContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("PandaInkContext")));
 builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
+builder.Services.AddScoped<ISeriesRepository, SeriesRepository>();
 
 var app = builder.Build();
 
