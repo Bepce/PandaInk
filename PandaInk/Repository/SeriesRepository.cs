@@ -16,6 +16,7 @@ namespace PandaInk.API.Repository
         public async Task<IEnumerable<SeriesDTO>> GetAllSeriesAsync()
         {
              return await _context.Series
+                .Include(s => s.Reviews)
                 .Select(s => s.ToSeriesDTO())
                 .ToListAsync();
         }
@@ -24,6 +25,7 @@ namespace PandaInk.API.Repository
         {
             return await _context.Series
                 .Where(s => s.Id == id)
+                .Include(s => s.Reviews)
                 .Select(s => s.ToSeriesDTO())
                 .FirstOrDefaultAsync();
         }

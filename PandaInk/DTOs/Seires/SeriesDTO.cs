@@ -1,4 +1,6 @@
-﻿namespace PandaInk.API.DTOs.Seires
+﻿using PandaInk.API.DTOs.Review;
+
+namespace PandaInk.API.DTOs.Seires
 {
     public class SeriesDTO
     {
@@ -13,5 +15,7 @@
         public string? Author { get; set; }
 
         public DateTime? ReleaseDate { get; set; }
+
+        public List<ReviewDTO> Reviews { get; set; }
     }
 }
