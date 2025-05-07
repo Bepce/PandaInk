@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using PandaInk.API.Data;
 using PandaInk.API.DTOs.Seires;
 using PandaInk.API.Helpers;
@@ -23,6 +24,14 @@ namespace PandaInk.API.Repository
             if (!string.IsNullOrEmpty(query.Title))
             {
                 series = series.Where(s => s.Title.ToLower().Contains(query.Title.ToLower()));
+            }
+
+            if(!string.IsNullOrEmpty(query.SortBy))
+            {
+                if (query.SortBy.Equals("ReleaseDate", StringComparison.OrdinalIgnoreCase))
+                {
+                    series = query.IsDescending ? series.OrderByDescending(s => s.ReleaseDate) : series.OrderBy(s => s.ReleaseDate);
+                }
             }
 
             return await series.Select(s => s.ToSeriesDTO()).ToListAsync();
