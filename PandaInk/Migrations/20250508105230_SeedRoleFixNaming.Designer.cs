@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PandaInk.API.Data;
 
@@ -11,9 +12,11 @@ using PandaInk.API.Data;
 namespace PandaInk.API.Migrations
 {
     [DbContext(typeof(PandaInkContext))]
-    partial class PandaInkContextModelSnapshot : ModelSnapshot
+    [Migration("20250508105230_SeedRoleFixNaming")]
+    partial class SeedRoleFixNaming
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
