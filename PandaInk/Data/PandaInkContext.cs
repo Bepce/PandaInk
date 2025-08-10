@@ -14,10 +14,24 @@ namespace PandaInk.API.Data
 
         public DbSet<Series> Series { get; set; } = null!;
         public DbSet<Review> Reviews { get; set; } = null!;
+        public DbSet<Library> Libraries { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Library>()
+                .HasKey(l => new { l.UserId, l.SeriesId });
+
+            modelBuilder.Entity<Library>()
+                .HasOne(u => u.User)
+                .WithMany(u => u.Libraries)
+                .HasForeignKey(l => l.UserId);
+
+            modelBuilder.Entity<Library>()
+                .HasOne(s => s.Series)
+                .WithMany(s => s.Libraries)
+                .HasForeignKey(l => l.SeriesId);
 
             List<IdentityRole> roles = new List<IdentityRole>
             {

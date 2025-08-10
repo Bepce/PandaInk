@@ -2,6 +2,7 @@
 
 namespace PandaInk.API.Models
 {
+    [Tags("Series")]
     public class Series
     {
         [Key]
@@ -20,5 +21,7 @@ namespace PandaInk.API.Models
         public DateTime? ReleaseDate { get; set; }
 
         public List<Review> Reviews { get; set; } = new List<Review>();
+
+        public List<Library> Libraries { get; set; } = new List<Library>();
     }
 }

@@ -51,13 +51,13 @@ namespace PandaInk.API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "79023320-5204-41cc-87f3-f6546c1164be",
+                            Id = "8667691e-1b2a-47dd-86c0-db2428e8800c",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "23781d8e-799e-4468-b679-09484220c649",
+                            Id = "6b786774-8c04-480f-b2d9-354c84509ccf",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -234,6 +234,21 @@ namespace PandaInk.API.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("PandaInk.API.Models.Library", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<Guid>("SeriesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("UserId", "SeriesId");
+
+                    b.HasIndex("SeriesId");
+
+                    b.ToTable("Libraries");
+                });
+
             modelBuilder.Entity("PandaInk.API.Models.Review", b =>
                 {
                     b.Property<Guid>("Id")
@@ -346,6 +361,25 @@ namespace PandaInk.API.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("PandaInk.API.Models.Library", b =>
+                {
+                    b.HasOne("PandaInk.API.Models.Series", "Series")
+                        .WithMany("Libraries")
+                        .HasForeignKey("SeriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PandaInk.API.Models.ApplicationUser", "User")
+                        .WithMany("Libraries")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Series");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("PandaInk.API.Models.Review", b =>
                 {
                     b.HasOne("PandaInk.API.Models.Series", "Series")
@@ -357,8 +391,15 @@ namespace PandaInk.API.Migrations
                     b.Navigation("Series");
                 });
 
+            modelBuilder.Entity("PandaInk.API.Models.ApplicationUser", b =>
+                {
+                    b.Navigation("Libraries");
+                });
+
             modelBuilder.Entity("PandaInk.API.Models.Series", b =>
                 {
+                    b.Navigation("Libraries");
+
                     b.Navigation("Reviews");
                 });
 #pragma warning restore 612, 618

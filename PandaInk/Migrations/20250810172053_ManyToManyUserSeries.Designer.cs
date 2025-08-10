@@ -12,8 +12,8 @@ using PandaInk.API.Data;
 namespace PandaInk.API.Migrations
 {
     [DbContext(typeof(PandaInkContext))]
-    [Migration("20250508104813_SeedRoleFix")]
-    partial class SeedRoleFix
+    [Migration("20250810172053_ManyToManyUserSeries")]
+    partial class ManyToManyUserSeries
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,13 +54,15 @@ namespace PandaInk.API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "ecb353a7-c9a2-4150-940c-0f544aa28803",
-                            Name = "ADMIN"
+                            Id = "8667691e-1b2a-47dd-86c0-db2428e8800c",
+                            Name = "User",
+                            NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "8568f226-f86a-4ff5-a0c0-0822bb059980",
-                            Name = "USER"
+                            Id = "6b786774-8c04-480f-b2d9-354c84509ccf",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
                         });
                 });
 
@@ -235,6 +237,21 @@ namespace PandaInk.API.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("PandaInk.API.Models.Library", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<Guid>("SeriesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("UserId", "SeriesId");
+
+                    b.HasIndex("SeriesId");
+
+                    b.ToTable("Libraries");
+                });
+
             modelBuilder.Entity("PandaInk.API.Models.Review", b =>
                 {
                     b.Property<Guid>("Id")
@@ -347,6 +364,25 @@ namespace PandaInk.API.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("PandaInk.API.Models.Library", b =>
+                {
+                    b.HasOne("PandaInk.API.Models.Series", "Series")
+                        .WithMany("Libraries")
+                        .HasForeignKey("SeriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PandaInk.API.Models.ApplicationUser", "User")
+                        .WithMany("Libraries")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Series");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("PandaInk.API.Models.Review", b =>
                 {
                     b.HasOne("PandaInk.API.Models.Series", "Series")
@@ -358,8 +394,15 @@ namespace PandaInk.API.Migrations
                     b.Navigation("Series");
                 });
 
+            modelBuilder.Entity("PandaInk.API.Models.ApplicationUser", b =>
+                {
+                    b.Navigation("Libraries");
+                });
+
             modelBuilder.Entity("PandaInk.API.Models.Series", b =>
                 {
+                    b.Navigation("Libraries");
+
                     b.Navigation("Reviews");
                 });
 #pragma warning restore 612, 618

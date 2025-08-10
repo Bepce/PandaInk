@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PandaInk.API.Models
 {
+    [Table("Reviews")]
     public class Review
     {
         [Key]
