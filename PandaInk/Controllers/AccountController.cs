@@ -72,5 +72,30 @@ namespace PandaInk.API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
             }
         }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(LoginDTO loginDTO)
+        {
+            try
+            {
+                if (!ModelState.IsValid) return BadRequest(ModelState);
+                var user = await _userManager.FindByNameAsync(loginDTO.Username);
+                if (user == null) return Unauthorized("Invalid username or password.");
+                var result = await _userManager.CheckPasswordAsync(user, loginDTO.Password);
+                if (!result) return Unauthorized("Invalid username or password.");
+                return Ok(
+                    new NewUserDTO
+                    {
+                        UserName = user.UserName,
+                        Email = user.Email,
+                        Token = _tokenService.CreateToken(user)
+                    }
+                );
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            }
+        }
     }
 }
