@@ -6,6 +6,7 @@ using PandaInk.API.Data;
 using PandaInk.API.Interfaces;
 using PandaInk.API.Models;
 using PandaInk.API.Repository;
+using PandaInk.API.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -62,6 +63,7 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 builder.Services.AddScoped<ISeriesRepository, SeriesRepository>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 
 var app = builder.Build();
 
