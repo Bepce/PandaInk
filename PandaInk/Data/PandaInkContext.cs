@@ -16,6 +16,7 @@ namespace PandaInk.API.Data
         public DbSet<Review> Reviews { get; set; } = null!;
         public DbSet<Library> Libraries { get; set; } = null!;
         public DbSet<Chapter> Chapters { get; set; } = null!;
+        public DbSet<Page> Pages { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -55,6 +56,11 @@ namespace PandaInk.API.Data
                 .HasMany(s => s.Reviews)
                 .WithOne(r => r.Series)
                 .HasForeignKey(r => r.SeriesId);
+
+            modelBuilder.Entity<Series>()
+                .HasMany(s => s.Chapters)
+                .WithOne(c => c.Series)
+                .HasForeignKey(c => c.SeriesId);
         }
     }
 }

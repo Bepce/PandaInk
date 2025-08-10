@@ -12,7 +12,7 @@ namespace PandaInk.API.Models
         [Required]
         public int ChapterNumbr { get; set; }
         [Required]
-        public string Content { get; set; } = string.Empty;
+        public List<Page> Content { get; set; }
         [ForeignKey("Series")]
         public Guid SeriesId { get; set; }
         public Series? Series { get; set; }
