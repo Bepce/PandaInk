@@ -24,6 +24,7 @@ namespace PandaInk.API.Mappers
                 Content = review.Content,
                 Rating = review.Rating,
                 CreatedAt = review.CreatedAt,
+                CreateBy = review.User?.UserName,
                 SeriesId = review.SeriesId
             };
         }

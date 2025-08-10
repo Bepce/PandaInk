@@ -40,8 +40,9 @@ namespace PandaInk.API.Repository
             await _context.FindAsync<Series>(seriesId);
            
             return await _context.Reviews
+                .Include(r => r.User)
                 .Where(r => r.SeriesId == seriesId)
-                .Select(r => r.ToReviewDTO())
+                .Select(r => r.ToReviewDTO())              
                 .ToListAsync();
         }
 

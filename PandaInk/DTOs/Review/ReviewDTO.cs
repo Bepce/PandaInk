@@ -19,6 +19,9 @@ namespace PandaInk.API.DTOs.Review
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         [Required]
+        public string CreateBy { get; set; } = string.Empty;
+
+        [Required]
         public Guid SeriesId { get; set; }
     }
 }

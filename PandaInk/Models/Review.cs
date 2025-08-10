@@ -19,5 +19,9 @@ namespace PandaInk.API.Models
         public Guid SeriesId { get; set; }
 
         public Series Series { get; set; }
+
+        public string UserId { get; set; }
+
+        public ApplicationUser User { get; set; }
     }
 }

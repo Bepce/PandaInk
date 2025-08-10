@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PandaInk.API.Data;
 using PandaInk.API.DTOs.Review;
+using PandaInk.API.Exntensions;
 using PandaInk.API.Interfaces;
 using PandaInk.API.Mappers;
 using PandaInk.API.Models;
@@ -15,11 +18,13 @@ namespace PandaInk.API.Controllers
     {
         private readonly PandaInkContext _context;
         private readonly IReviewRepository _reviewRepository;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ReviewController(PandaInkContext context, IReviewRepository reviewRepo)
+        public ReviewController(PandaInkContext context, IReviewRepository reviewRepo, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _reviewRepository = reviewRepo;
+            _userManager = userManager;
         }
 
         // GET: api/review/{seriesId}
@@ -38,6 +43,7 @@ namespace PandaInk.API.Controllers
 
         // POST: api/review
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> CreateReview([FromBody] CreateReviewDTO reviewDTO)
         {
             var reviewModel = reviewDTO.ToReviewFromCreateReviewDTO();
@@ -52,6 +58,10 @@ namespace PandaInk.API.Controllers
                 return BadRequest();
             }
 
+            var username = User.GetUsername();
+            var user = await _userManager.FindByNameAsync(username);
+            reviewModel.UserId = user.Id;
+
             await _reviewRepository.CreateReviewAsync(reviewModel);
 
             return CreatedAtAction(nameof(GetReview), new { id = seriesId }, reviewDTO);
@@ -59,6 +69,7 @@ namespace PandaInk.API.Controllers
 
         // PUT: api/review/{id}
         [HttpPut]
+        [Authorize]
         [Route("{id}")]
         public async Task<IActionResult> UpdateReview([FromRoute] Guid id, [FromBody] UpdateReviewDTO reviewDTO)
         {
@@ -67,6 +78,14 @@ namespace PandaInk.API.Controllers
             if (review == null)
             {
                 return NotFound();
+            }
+
+            var username = User.GetUsername();
+            var user = await _userManager.FindByNameAsync(username);
+
+            if (review.UserId != user.Id)
+            {
+                return Unauthorized("You can only update your own reviews.");
             }
 
             return Ok(review.ToReviewDTO());
