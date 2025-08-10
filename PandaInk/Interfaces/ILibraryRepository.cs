@@ -5,5 +5,8 @@ namespace PandaInk.API.Interfaces
     public interface ILibraryRepository
     {
         Task<List<Series>> GetUserLibraryAsync(ApplicationUser user);
+        Task AddToLibraryAsync(Library libraryEntry);
+        Task<bool> LibraryEntryExistsAsync(Library libraryEntry);
+
     }
 }

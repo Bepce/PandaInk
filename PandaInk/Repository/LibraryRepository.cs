@@ -13,6 +13,12 @@ namespace PandaInk.API.Repository
             _context = context;
         }
 
+        public async Task AddToLibraryAsync(Library libraryEntry)
+        {
+            await _context.Libraries.AddAsync(libraryEntry);
+            await _context.SaveChangesAsync();           
+        }
+
         public async Task<List<Series>> GetUserLibraryAsync(ApplicationUser user)
         {
             return await _context.Libraries
@@ -27,6 +33,11 @@ namespace PandaInk.API.Repository
                     Genre = series.Series.Genre,
                     ReleaseDate = series.Series.ReleaseDate
                 }).ToListAsync();
+        }
+
+        public async Task<bool> LibraryEntryExistsAsync(Library libraryEntry)
+        {
+            return _context.Libraries.Any(l => l.UserId == libraryEntry.UserId && l.SeriesId == libraryEntry.SeriesId);
         }
     }
 }

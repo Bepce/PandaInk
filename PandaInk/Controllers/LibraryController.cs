@@ -34,10 +34,31 @@ namespace PandaInk.API.Controllers
             {
                 return Unauthorized("User not found.");
             }
-            var library = await _libraryRepository.GetUserLibraryAsync(user);        
+            var library = await _libraryRepository.GetUserLibraryAsync(user);
             return Ok(library);
         }
 
-        
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> AddToLibrary(Guid seriesId)
+        {
+            var username = User.GetUsername();
+            var user = await _userManager.FindByNameAsync(username);           
+            var series = await _seriesRepository.GetSeriesByIdAsync(seriesId);
+            if (series == null) return BadRequest("Series not found.");
+            
+            var libraryEntry = new Library
+            {
+                UserId = user.Id,
+                SeriesId = seriesId
+            };
+            if (await _libraryRepository.LibraryEntryExistsAsync(libraryEntry))
+            {
+                return BadRequest("Series already exists in library.");
+            }
+
+            await _libraryRepository.AddToLibraryAsync(libraryEntry);
+            return Ok("Series added to library successfully.");
+        }
     }
 }
