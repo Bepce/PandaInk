@@ -19,7 +19,7 @@ namespace PandaInk.API.Models
         public Guid SeriesId { get; set; }
 
         public Series Series { get; set; }
-
+        [ForeignKey("User")]
         public string UserId { get; set; }
 
         public ApplicationUser User { get; set; }

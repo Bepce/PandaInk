@@ -15,6 +15,7 @@ namespace PandaInk.API.Data
         public DbSet<Series> Series { get; set; } = null!;
         public DbSet<Review> Reviews { get; set; } = null!;
         public DbSet<Library> Libraries { get; set; } = null!;
+        public DbSet<Chapter> Chapters { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
