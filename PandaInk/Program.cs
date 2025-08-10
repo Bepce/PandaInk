@@ -93,6 +93,7 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 builder.Services.AddScoped<ISeriesRepository, SeriesRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<ILibraryRepository, LibraryRepository>();
 
 var app = builder.Build();
 
