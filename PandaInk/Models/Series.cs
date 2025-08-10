@@ -19,7 +19,7 @@ namespace PandaInk.API.Models
         public string? Genre { get; set; }
         [Required]
         public DateTime? ReleaseDate { get; set; }
-
+        public List<Chapter> Chapters { get; set; } = new List<Chapter>();
         public List<Review> Reviews { get; set; } = new List<Review>();
 
         public List<Library> Libraries { get; set; } = new List<Library>();
