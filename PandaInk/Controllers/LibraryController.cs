@@ -43,10 +43,10 @@ namespace PandaInk.API.Controllers
         public async Task<IActionResult> AddToLibrary(Guid seriesId)
         {
             var username = User.GetUsername();
-            var user = await _userManager.FindByNameAsync(username);           
+            var user = await _userManager.FindByNameAsync(username);
             var series = await _seriesRepository.GetSeriesByIdAsync(seriesId);
             if (series == null) return BadRequest("Series not found.");
-            
+
             var libraryEntry = new Library
             {
                 UserId = user.Id,
@@ -59,6 +59,25 @@ namespace PandaInk.API.Controllers
 
             await _libraryRepository.AddToLibraryAsync(libraryEntry);
             return Ok("Series added to library successfully.");
+        }
+
+        [HttpDelete]
+        [Authorize]
+        public async Task<IActionResult> RemoveFromLibrary(Guid seriesId)
+        {
+            var username = User.GetUsername();
+            var user = await _userManager.FindByNameAsync(username);
+            var libraryEntry = new Library
+            {
+                UserId = user.Id,
+                SeriesId = seriesId
+            };
+            if (!await _libraryRepository.LibraryEntryExistsAsync(libraryEntry))
+            {
+                return BadRequest("Series not found in library.");
+            }
+            _libraryRepository.RemoveFromLibrary(libraryEntry);
+            return Ok("Series removed from library successfully.");
         }
     }
 }

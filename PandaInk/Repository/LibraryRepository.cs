@@ -39,5 +39,13 @@ namespace PandaInk.API.Repository
         {
              return _context.Libraries.Any(l => l.UserId == libraryEntry.UserId && l.SeriesId == libraryEntry.SeriesId);
         }
+
+        public async void RemoveFromLibrary(Library libraryEntry)
+        {
+            await _context.Libraries
+                .Where(l => l.UserId == libraryEntry.UserId && l.SeriesId == libraryEntry.SeriesId)
+                .ExecuteDeleteAsync();
+            await _context.SaveChangesAsync();
+        }
     }
 }
