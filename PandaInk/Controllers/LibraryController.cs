@@ -15,9 +15,9 @@ namespace PandaInk.API.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ISeriesRepository _seriesRepository;
-        private readonly LibraryRepository _libraryRepository;
+        private readonly ILibraryRepository _libraryRepository;
 
-        public LibraryController(UserManager<ApplicationUser> userManager, ISeriesRepository seriesRepository, LibraryRepository libraryRepository)
+        public LibraryController(UserManager<ApplicationUser> userManager, ISeriesRepository seriesRepository, ILibraryRepository libraryRepository)
         {
             _userManager = userManager;
             _seriesRepository = seriesRepository;

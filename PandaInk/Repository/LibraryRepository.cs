@@ -37,7 +37,7 @@ namespace PandaInk.API.Repository
 
         public async Task<bool> LibraryEntryExistsAsync(Library libraryEntry)
         {
-            return _context.Libraries.Any(l => l.UserId == libraryEntry.UserId && l.SeriesId == libraryEntry.SeriesId);
+             return _context.Libraries.Any(l => l.UserId == libraryEntry.UserId && l.SeriesId == libraryEntry.SeriesId);
         }
     }
 }
