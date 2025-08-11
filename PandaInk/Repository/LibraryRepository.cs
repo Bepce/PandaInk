@@ -2,6 +2,7 @@
 using PandaInk.API.Data;
 using PandaInk.API.DTOs.Seires;
 using PandaInk.API.Interfaces;
+using PandaInk.API.Mappers;
 using PandaInk.API.Models;
 
 namespace PandaInk.API.Repository
@@ -24,17 +25,9 @@ namespace PandaInk.API.Repository
         {
             return await _context.Libraries
                 .Where(l => l.UserId == user.Id)
-                .Include(s => s.Series.Chapters)
-                .Select(series => new SeriesDTO
-                {
-                    Id = series.SeriesId,
-                    Title = series.Series.Title,
-                    Description = series.Series.Description,
-                    CoverImage = series.Series.CoverImage,
-                    Author = series.Series.Author,
-                    Genre = series.Series.Genre,
-                    ReleaseDate = series.Series.ReleaseDate
-                }).ToListAsync();
+                .Include(l => l.Series.Chapters)
+                .Select(l => l.Series.ToSeriesDTO())
+                .ToListAsync();
         }
 
         public async Task<bool> LibraryEntryExistsAsync(Library libraryEntry)

@@ -15,7 +15,8 @@ namespace PandaInk.API.Mappers
                 CoverImage = series.CoverImage,
                 Author = series.Author,
                 ReleaseDate = series.ReleaseDate,
-                Reviews = series.Reviews.Select(r => r.ToReviewDTO()).ToList()
+                Reviews = series.Reviews.Select(r => r.ToReviewDTO()).ToList(),
+                Chapters = series.Chapters.Select(c => c.ToChapterDTO()).ToList(),
             };
         }
     }

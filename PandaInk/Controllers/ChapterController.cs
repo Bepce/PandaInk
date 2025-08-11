@@ -17,6 +17,7 @@ namespace PandaInk.API.Controllers
         {
             _chapterRepository = chapterRepository;
         }
+
         // GET: api/chapter/{seriesId}
         [HttpGet("{seriesId}")]
         public async Task<IActionResult> GetChaptersBySeriesId(Guid seriesId)
@@ -29,7 +30,7 @@ namespace PandaInk.API.Controllers
             return Ok(chapter);
         }
 
-        // GET: api/chapter/pageNumber}
+        // GET: api/chapter/pageNumber
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> GetChaptersByPageId(int? pageNumber, Guid chapterId)
