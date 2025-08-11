@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PandaInk.API.Data;
+using PandaInk.API.DTOs.Seires;
 using PandaInk.API.Interfaces;
 using PandaInk.API.Models;
 
@@ -19,12 +20,12 @@ namespace PandaInk.API.Repository
             await _context.SaveChangesAsync();           
         }
 
-        public async Task<List<Series>> GetUserLibraryAsync(ApplicationUser user)
+        public async Task<List<SeriesDTO>> GetUserLibraryAsync(ApplicationUser user)
         {
             return await _context.Libraries
                 .Where(l => l.UserId == user.Id)
                 .Include(s => s.Series.Chapters)
-                .Select(series => new Series
+                .Select(series => new SeriesDTO
                 {
                     Id = series.SeriesId,
                     Title = series.Series.Title,

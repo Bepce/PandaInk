@@ -1,4 +1,5 @@
-﻿using PandaInk.API.Models;
+﻿using PandaInk.API.DTOs.Page;
+using PandaInk.API.Models;
 
 namespace PandaInk.API.DTOs.Chapter
 {
@@ -6,7 +7,7 @@ namespace PandaInk.API.DTOs.Chapter
     {
         public string Title { get; set; } = string.Empty;
         public int ChapterNumber { get; set; }
-        public List<PandaInk.API.Models.Page> Content { get; set; }
+        public List<PageDTO> Content { get; set; }
         public Guid SeriesId { get; set; }
     }
 }

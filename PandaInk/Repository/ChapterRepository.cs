@@ -20,6 +20,22 @@ namespace PandaInk.API.Repository
             await _context.SaveChangesAsync();
         }
 
+        public async Task<List<ChapterDTO?>> GetByIdAsync(Guid id)
+        {
+            var result = await _context.Chapters
+                .Include(c => c.Content)
+                .Where(c => c.SeriesId == id)
+                .OrderBy(c => c.Title)
+                .Select(c => new ChapterDTO
+                {
+                    Id = c.Id,
+                    Title = c.Title,
+                    Content = (List<Page?>)c.Content.OrderBy(c => c.PageNumber),
+                })
+                .ToListAsync();
+            return result;
+        }
+
         public async Task<PageDTO?> GetPageByPageNumber(int? pageNumber, Guid chapterId)
         {
             var result = await _context.Pages

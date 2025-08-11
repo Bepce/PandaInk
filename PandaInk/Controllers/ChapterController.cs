@@ -17,7 +17,18 @@ namespace PandaInk.API.Controllers
         {
             _chapterRepository = chapterRepository;
         }
-        
+        // GET: api/chapter/{seriesId}
+        [HttpGet("{seriesId}")]
+        public async Task<IActionResult> GetChaptersBySeriesId(Guid seriesId)
+        {
+            var chapter = await _chapterRepository.GetByIdAsync(seriesId);
+            if (chapter == null || !chapter.Any())
+            {
+                return NotFound();
+            }
+            return Ok(chapter);
+        }
+
         // GET: api/chapter/pageNumber}
         [HttpGet]
         [Authorize]
@@ -25,7 +36,7 @@ namespace PandaInk.API.Controllers
         {
             if (pageNumber == null) pageNumber = 1;
             var page = await _chapterRepository.GetPageByPageNumber(pageNumber, chapterId);
-            if (page == null)
+            if (page == null )
             {
                 return NotFound();
             }

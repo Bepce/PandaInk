@@ -1,4 +1,5 @@
-﻿using PandaInk.API.DTOs.Review;
+﻿using PandaInk.API.DTOs.Chapter;
+using PandaInk.API.DTOs.Review;
 using System.ComponentModel.DataAnnotations;
 
 namespace PandaInk.API.DTOs.Seires
@@ -12,6 +13,8 @@ namespace PandaInk.API.DTOs.Seires
         [Required]
         public string Description { get; set; } = string.Empty;
         [Required]
+        public string Genre { get; set; }
+        [Required]
         public string? CoverImage { get; set; }
         [Required]
         public string? Author { get; set; }
@@ -19,5 +22,7 @@ namespace PandaInk.API.DTOs.Seires
         public DateTime? ReleaseDate { get; set; }
 
         public List<ReviewDTO>? Reviews { get; set; }
+
+        public List<ChapterDTO>? Chapters { get; set; }
     }
 }
