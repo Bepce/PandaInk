@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PandaInk.API.DTOs.Chapter;
 using PandaInk.API.Interfaces;
@@ -8,6 +9,7 @@ namespace PandaInk.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ChapterController : ControllerBase
     {
         private readonly IChapterRepository _chapterRepository;
@@ -26,8 +28,23 @@ namespace PandaInk.API.Controllers
             }
             return Ok(chapter);
         }
+
+        // GET: api/chapter/pageNumber}
+        [HttpGet]
+        [Route("page/{pageNumber}")]
+        public async Task<IActionResult> GetChaptersByPageId(int pageNumber, Guid chapterId)
+        {
+            var page = await _chapterRepository.GetPageByPageNumber(pageNumber, chapterId);
+            if (page == null )
+            {
+                return NotFound();
+            }
+            return Ok(page);
+        }
+
         // POST: api/chapter
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateChapter([FromBody] CreateChapterDTO chapterDTO)
         {
             if (!ModelState.IsValid)
@@ -39,8 +56,7 @@ namespace PandaInk.API.Controllers
             {
                 SeriesId = chapterDTO.SeriesId,
                 Title = chapterDTO.Title,
-                Content = chapterDTO.Content,
-                ChapterNumbr = chapterDTO.ChapterNumber
+                ChapterNumber = chapterDTO.ChapterNumber
             };
 
             await _chapterRepository.CreateAsync(chapter);

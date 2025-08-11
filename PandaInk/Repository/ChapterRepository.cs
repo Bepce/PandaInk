@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PandaInk.API.Data;
 using PandaInk.API.DTOs.Chapter;
+using PandaInk.API.DTOs.Page;
 using PandaInk.API.Interfaces;
 using PandaInk.API.Models;
 
@@ -19,17 +20,32 @@ namespace PandaInk.API.Repository
             await _context.SaveChangesAsync();
         }
 
-        public async Task<ChapterDTO?> GetByIdAsync(Guid id)
+        public async Task<List<ChapterDTO?>> GetByIdAsync(Guid id)
         {
             var result = await _context.Chapters
-                .Where(c => c.Id == id)
+                .Include(c => c.Content)
+                .Where(c => c.SeriesId == id)
                 .Select(c => new ChapterDTO
                 {
                     Title = c.Title,
-                    Content = c.Content
+                 
                 })
-                .FirstOrDefaultAsync();
+                .ToListAsync();
             return result;
+        }
+
+        public async Task<PageDTO?> GetPageByPageNumber(int pageNumber, Guid chapterId)
+        {
+            var result = await _context.Pages
+                .Where(p => p.ChapterId == chapterId && pageNumber == pageNumber)
+                .Select(p => new PageDTO
+                {
+
+                    PageNumber = p.PageNumber,
+                    ImageUrl = p.ImageUrl
+                }).FirstOrDefaultAsync();
+
+                return result;
         }
     }
 }

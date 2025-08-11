@@ -94,6 +94,7 @@ builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 builder.Services.AddScoped<ISeriesRepository, SeriesRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<ILibraryRepository, LibraryRepository>();
+builder.Services.AddScoped<IChapterRepository, ChapterRepository>();
 
 var app = builder.Build();
 

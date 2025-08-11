@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PandaInk.API.Data;
 
@@ -11,9 +12,11 @@ using PandaInk.API.Data;
 namespace PandaInk.API.Migrations
 {
     [DbContext(typeof(PandaInkContext))]
-    partial class PandaInkContextModelSnapshot : ModelSnapshot
+    [Migration("20250811190523_FixNamingAndSeedChapters")]
+    partial class FixNamingAndSeedChapters
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,13 +54,13 @@ namespace PandaInk.API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "1fedf582-694d-4f17-9f32-f6cf3b45f26b",
+                            Id = "4dec5005-0ebf-4a83-87b4-b81a471c40aa",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "3a38994a-2e7d-4332-849a-ec89cca101f6",
+                            Id = "dc60386d-8a1b-4599-b3f2-82ee79b007ef",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -152,13 +155,13 @@ namespace PandaInk.API.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "f9f9694c-3118-481c-81b7-eba2a9123f91",
-                            RoleId = "1fedf582-694d-4f17-9f32-f6cf3b45f26b"
+                            UserId = "d25c3aa2-014e-445d-a8a8-9bf142bb856f",
+                            RoleId = "4dec5005-0ebf-4a83-87b4-b81a471c40aa"
                         },
                         new
                         {
-                            UserId = "3bf4ffff-5c78-4a62-b687-609b3cc0b6a6",
-                            RoleId = "3a38994a-2e7d-4332-849a-ec89cca101f6"
+                            UserId = "777f0d0e-c450-4160-8681-f40c11243f56",
+                            RoleId = "dc60386d-8a1b-4599-b3f2-82ee79b007ef"
                         });
                 });
 
@@ -248,31 +251,31 @@ namespace PandaInk.API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "f9f9694c-3118-481c-81b7-eba2a9123f91",
+                            Id = "d25c3aa2-014e-445d-a8a8-9bf142bb856f",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "08ec44f8-0039-4b89-88b6-50528dbbd5a9",
+                            ConcurrencyStamp = "4a41b19e-4dff-41ee-93ba-207dd21b5957",
                             Email = "admin@admin.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEOVojVkGJix0SISVngqTayDa+EaHxXH4gR0GvWMo25ZAOwfqdt0HVFyMNa0dtrVg1A==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEIXlWwxBTzZ2p/EfBVZ5iT5Sz6lkmcw76CG8Q7Qxu1BlBR1sLy0+z8JZDo/w776g5Q==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "18d4a6e3-8f7d-4f7d-a907-475610d7cc53",
+                            SecurityStamp = "f253d2f0-bbee-4e13-8a33-91eca822aa14",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         },
                         new
                         {
-                            Id = "3bf4ffff-5c78-4a62-b687-609b3cc0b6a6",
+                            Id = "777f0d0e-c450-4160-8681-f40c11243f56",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "10dbf1b7-2295-44b5-9ea3-3ba11bbdb911",
+                            ConcurrencyStamp = "259de032-a051-4748-8f9b-7bd05d765204",
                             Email = "user@user.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedUserName = "USER",
-                            PasswordHash = "AQAAAAIAAYagAAAAEEkZ6UgBM/yno368DX05gm507bZAZz0DM86lDTD618N2e7gp9J0iMMmOHKVVrfBeyw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEMuOmFVxhcMFovr+ghL1Qzj0UekyaGNlgKoxoUab2/ibxg6WXUgoTXnxpaRPdDuFvw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "5de07116-7d8b-4075-9925-329eccf6972a",
+                            SecurityStamp = "f2fc9d56-e951-450b-b609-841e122e5261",
                             TwoFactorEnabled = false,
                             UserName = "user"
                         });
@@ -299,36 +302,6 @@ namespace PandaInk.API.Migrations
                     b.HasIndex("SeriesId");
 
                     b.ToTable("Chapters");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("577f2944-cec7-4b21-aaee-f794c1cf6381"),
-                            ChapterNumber = 1,
-                            SeriesId = new Guid("965c43c5-cc22-496b-8abb-001f9eadda7d"),
-                            Title = "Chapter 1: Naruto Uzumaki"
-                        },
-                        new
-                        {
-                            Id = new Guid("9ca453a0-ed51-4e9e-96fb-1b3de3a3a04b"),
-                            ChapterNumber = 2,
-                            SeriesId = new Guid("965c43c5-cc22-496b-8abb-001f9eadda7d"),
-                            Title = "Chapter 2: The Worst Client"
-                        },
-                        new
-                        {
-                            Id = new Guid("cccd4420-5e1a-4630-ab20-6e0ef2225ee9"),
-                            ChapterNumber = 1,
-                            SeriesId = new Guid("e31d4a9c-8323-4e58-9513-90af704b1ada"),
-                            Title = "Chapter 1: Romance Dawn"
-                        },
-                        new
-                        {
-                            Id = new Guid("e115de06-3c25-4e3c-9a01-53ce220e8c17"),
-                            ChapterNumber = 2,
-                            SeriesId = new Guid("e31d4a9c-8323-4e58-9513-90af704b1ada"),
-                            Title = "Chapter 2: They Call Him \"Straw Hat Luffy\""
-                        });
                 });
 
             modelBuilder.Entity("PandaInk.API.Models.Library", b =>
@@ -367,50 +340,6 @@ namespace PandaInk.API.Migrations
                     b.HasIndex("ChapterId");
 
                     b.ToTable("Pages");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("4fba4bd7-1b1f-402b-81c1-e44968c575d3"),
-                            ChapterId = new Guid("577f2944-cec7-4b21-aaee-f794c1cf6381"),
-                            ImageUrl = "https://cmsapi-frontend.naruto-official.com/site/api/naruto/Image/get?path=/naruto/en/comics/2022/09/29/E7fnRJ3vSgYHriRY/2.jpg",
-                            PageNumber = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("bac2f36f-8e85-4e3b-8f0b-3f14b91a2c6c"),
-                            ChapterId = new Guid("577f2944-cec7-4b21-aaee-f794c1cf6381"),
-                            ImageUrl = "https://cmsapi-frontend.naruto-official.com/site/api/naruto/Image/get?path=/naruto/en/comics/2022/09/29/4Oo1qlwVNnr1BffM/3.jpg",
-                            PageNumber = 2
-                        },
-                        new
-                        {
-                            Id = new Guid("3e6e62cd-a701-467d-9b3a-43e03abac819"),
-                            ChapterId = new Guid("577f2944-cec7-4b21-aaee-f794c1cf6381"),
-                            ImageUrl = "https://cmsapi-frontend.naruto-official.com/site/api/naruto/Image/get?path=/naruto/en/comics/2022/09/29/ubq1tyQ5SG3QNxww/1.jpg",
-                            PageNumber = 3
-                        },
-                        new
-                        {
-                            Id = new Guid("6fb6d27f-69bd-4bef-bcab-b4ef463093e9"),
-                            ChapterId = new Guid("cccd4420-5e1a-4630-ab20-6e0ef2225ee9"),
-                            ImageUrl = "https://eu2.contabostorage.com/2352a0b47a16442aa2bd93b0a47735ea:manga/1piece/Chapter%201/01.jpg",
-                            PageNumber = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("83ed2101-dc33-422d-8b25-98255014f1de"),
-                            ChapterId = new Guid("cccd4420-5e1a-4630-ab20-6e0ef2225ee9"),
-                            ImageUrl = "https://eu2.contabostorage.com/2352a0b47a16442aa2bd93b0a47735ea:manga/1piece/Chapter%201/02.jpg",
-                            PageNumber = 2
-                        },
-                        new
-                        {
-                            Id = new Guid("ee5a44bb-3928-477f-bfd7-dff9e49b9250"),
-                            ChapterId = new Guid("cccd4420-5e1a-4630-ab20-6e0ef2225ee9"),
-                            ImageUrl = "https://eu2.contabostorage.com/2352a0b47a16442aa2bd93b0a47735ea:manga/1piece/Chapter%201/03.jpg",
-                            PageNumber = 3
-                        });
                 });
 
             modelBuilder.Entity("PandaInk.API.Models.Review", b =>
@@ -482,7 +411,7 @@ namespace PandaInk.API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("965c43c5-cc22-496b-8abb-001f9eadda7d"),
+                            Id = new Guid("b01f4b2e-5c14-49fa-8eeb-186608e4f15a"),
                             Author = "Masashi Kishimoto",
                             CoverImage = "https://upload.wikimedia.org/wikipedia/en/9/94/NarutoCoverTankobon1.jpg",
                             Description = "Naruto is a Japanese manga series written and illustrated by Masashi Kishimoto. It tells the story of Naruto Uzumaki, a young ninja who seeks recognition from his peers and dreams of becoming the Hokage, the leader of his village.",
@@ -492,7 +421,7 @@ namespace PandaInk.API.Migrations
                         },
                         new
                         {
-                            Id = new Guid("e31d4a9c-8323-4e58-9513-90af704b1ada"),
+                            Id = new Guid("32fefa45-2189-4948-af17-2e0c67178668"),
                             Author = "Eiichiro Oda",
                             CoverImage = "https://upload.wikimedia.org/wikipedia/en/9/90/One_Piece%2C_Volume_61_Cover_%28Japanese%29.jpg",
                             Description = "One Piece is a Japanese manga series written and illustrated by Eiichiro Oda. It follows the adventures of Monkey D. Luffy and his pirate crew in their quest to find the One Piece, the greatest treasure in the world.",
