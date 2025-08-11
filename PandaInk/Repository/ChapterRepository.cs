@@ -28,7 +28,7 @@ namespace PandaInk.API.Repository
                 .Select(c => new ChapterDTO
                 {
                     Title = c.Title,
-                 
+                    Content = (List<Page?>)c.Content.OrderBy(c => c.PageNumber),
                 })
                 .ToListAsync();
             return result;
