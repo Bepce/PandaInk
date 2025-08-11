@@ -35,24 +35,7 @@ namespace PandaInk.API.Data
             modelBuilder.Entity<Library>()
                 .HasOne(s => s.Series)
                 .WithMany(s => s.Libraries)
-                .HasForeignKey(l => l.SeriesId);
-
-            List<IdentityRole> roles = new List<IdentityRole>
-            {
-                new IdentityRole
-                {
-                    Name = "User",
-                    NormalizedName = "USER"
-                },
-                new IdentityRole
-                {
-                    Name = "Admin",
-                    NormalizedName = "ADMIN"
-                }
-            };
-
-            modelBuilder.Entity<IdentityRole>()
-                .HasData(roles);
+                .HasForeignKey(l => l.SeriesId);           
 
             modelBuilder.Entity<Series>()
                 .HasMany(s => s.Reviews)
@@ -72,23 +55,63 @@ namespace PandaInk.API.Data
 
         private void SeedUser(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<ApplicationUser>().HasData(
-                new ApplicationUser
+            var admin = new ApplicationUser
+            {
+                Id = Guid.NewGuid().ToString(),
+                UserName = "admin",
+                NormalizedUserName = "ADMIN",
+                PasswordHash = new PasswordHasher<ApplicationUser>().HashPassword(null, "Admin123"),
+                Email = "admin@admin.com"
+            };
+
+            var user = new ApplicationUser
+            {
+                Id = Guid.NewGuid().ToString(),
+                UserName = "user",
+                NormalizedUserName = "USER",
+                PasswordHash = new PasswordHasher<ApplicationUser>().HashPassword(null, "User123"),
+                Email = "user@user.com"
+            };
+
+
+
+            var adminRole = new IdentityRole
+            {
+                Name = "Admin",
+                NormalizedName = "ADMIN"
+            };
+
+            var userRole = new IdentityRole
+            {
+                Name = "User",
+                NormalizedName = "USER"
+            };
+
+            modelBuilder.Entity<IdentityUserRole<string>>().HasData(
+                new IdentityUserRole<string>
                 {
-                    Id = Guid.NewGuid().ToString(),
-                    UserName = "admin",
-                    NormalizedUserName = "ADMIN",
-                    PasswordHash = new PasswordHasher<ApplicationUser>().HashPassword(null, "Admin123"),
-                    Email = "admin@admin.com"
+                    UserId = admin.Id,
+                    RoleId = adminRole.Id
                 },
-                new ApplicationUser
+                new IdentityUserRole<string>
                 {
-                    Id = Guid.NewGuid().ToString(),
-                    UserName = "user",
-                    NormalizedUserName = "USER",
-                    PasswordHash = new PasswordHasher<ApplicationUser>().HashPassword(null, "User123"),
-                    Email = "user@user.com"
-                });
+                    UserId = user.Id,
+                    RoleId = userRole.Id
+                }
+                );
+
+            modelBuilder.Entity<IdentityRole>()
+                .HasData(
+                    adminRole,
+                    userRole
+                );
+
+            modelBuilder.Entity<ApplicationUser>().HasData(
+                admin,
+                user
+                );
+                
+                
         }
     }
 }

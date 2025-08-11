@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PandaInk.API.Data;
 
@@ -11,9 +12,11 @@ using PandaInk.API.Data;
 namespace PandaInk.API.Migrations
 {
     [DbContext(typeof(PandaInkContext))]
-    partial class PandaInkContextModelSnapshot : ModelSnapshot
+    [Migration("20250811182959_UserSeed")]
+    partial class UserSeed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,15 +54,15 @@ namespace PandaInk.API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "95efc24e-09de-4009-8c6c-f38687881adc",
-                            Name = "Admin",
-                            NormalizedName = "ADMIN"
+                            Id = "f8ac7626-d2ba-4d6e-b85a-3a19de1b0fb1",
+                            Name = "User",
+                            NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "dfbee655-98bb-4972-bd6f-4e652b4288fd",
-                            Name = "User",
-                            NormalizedName = "USER"
+                            Id = "dd21cd8d-598e-4797-bd34-c8e9a34da20d",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
                         });
                 });
 
@@ -148,18 +151,6 @@ namespace PandaInk.API.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = "1e5b74da-b809-4107-8357-9356e430be48",
-                            RoleId = "95efc24e-09de-4009-8c6c-f38687881adc"
-                        },
-                        new
-                        {
-                            UserId = "e08d6124-4742-4e8c-9312-29ac17faca05",
-                            RoleId = "dfbee655-98bb-4972-bd6f-4e652b4288fd"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -248,31 +239,31 @@ namespace PandaInk.API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "1e5b74da-b809-4107-8357-9356e430be48",
+                            Id = "d57a8aeb-b852-4f8d-93b1-3075bfa9861c",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "baf3eaff-3d61-4a5e-ac95-be950c0b2cec",
+                            ConcurrencyStamp = "808731cf-eee3-47fb-9de0-71c90563c79e",
                             Email = "admin@admin.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEKFhp9mf+blWO/aPR/y1rIDkgxXQmQQJo4vqu/8p+bxCrwIqCKuQhHd/p6BEbNCfBw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEKQzr483b2mRsxMjHUmNU/ZdQQliXaFts7t44jYKa6PotVVe9ioGe7EZgG6VGIxrlg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "2d83b299-aa6d-4a12-affe-6cde34cb44b9",
+                            SecurityStamp = "1a908c6d-f51d-44a2-840e-d070f6324f9f",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         },
                         new
                         {
-                            Id = "e08d6124-4742-4e8c-9312-29ac17faca05",
+                            Id = "bc0d1ccb-8b1c-4512-abc8-0c47e22e8fb1",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "3817c446-a413-45c9-a259-cd1e275e7ac7",
+                            ConcurrencyStamp = "6adcef97-a045-4675-b9ae-4943fe83bbe6",
                             Email = "user@user.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedUserName = "USER",
-                            PasswordHash = "AQAAAAIAAYagAAAAEKnK18gAQLxVLOoHJT3415F7Gxn6Oc5jUt6frUW8CLX9neZIxmIzaOKQSjqhHKflhQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEP65pWO42CmKOXejioxIetXI9y8aOZcYybdvVi6ee68/LKDYFT1PK6PxeHBhXrFL8Q==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "e687f0b6-da78-47ee-bbb2-4d67ba10a49b",
+                            SecurityStamp = "0e2d0f2f-cf9d-47da-9eb2-eb5e5d83a5dc",
                             TwoFactorEnabled = false,
                             UserName = "user"
                         });
