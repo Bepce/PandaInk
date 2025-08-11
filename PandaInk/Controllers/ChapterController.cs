@@ -39,7 +39,7 @@ namespace PandaInk.API.Controllers
             {
                 SeriesId = chapterDTO.SeriesId,
                 Title = chapterDTO.Title,
-                Content = new List<Page>(),
+                Content = chapterDTO.Content,
                 ChapterNumbr = chapterDTO.ChapterNumber
             };
 

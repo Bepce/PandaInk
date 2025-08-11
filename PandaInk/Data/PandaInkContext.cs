@@ -9,7 +9,7 @@ namespace PandaInk.API.Data
     {
         public PandaInkContext(DbContextOptions<PandaInkContext> options) : base(options)
         {
-            
+
         }
 
         public DbSet<Series> Series { get; set; } = null!;
@@ -21,6 +21,8 @@ namespace PandaInk.API.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            SeedUser(modelBuilder);
 
             modelBuilder.Entity<Library>()
                 .HasKey(l => new { l.UserId, l.SeriesId });
@@ -61,6 +63,32 @@ namespace PandaInk.API.Data
                 .HasMany(s => s.Chapters)
                 .WithOne(c => c.Series)
                 .HasForeignKey(c => c.SeriesId);
+
+            modelBuilder.Entity<Chapter>()
+                .HasMany(c => c.Content)
+                .WithOne(p => p.Chapter)
+                .HasForeignKey(p => p.ChapterId);
+        }
+
+        private void SeedUser(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ApplicationUser>().HasData(
+                new ApplicationUser
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    UserName = "admin",
+                    NormalizedUserName = "ADMIN",
+                    PasswordHash = new PasswordHasher<ApplicationUser>().HashPassword(null, "Admin123"),
+                    Email = "admin@admin.com"
+                },
+                new ApplicationUser
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    UserName = "user",
+                    NormalizedUserName = "USER",
+                    PasswordHash = new PasswordHasher<ApplicationUser>().HashPassword(null, "User123"),
+                    Email = "user@user.com"
+                });
         }
     }
 }
