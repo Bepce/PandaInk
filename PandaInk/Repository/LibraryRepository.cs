@@ -23,6 +23,7 @@ namespace PandaInk.API.Repository
         {
             return await _context.Libraries
                 .Where(l => l.UserId == user.Id)
+                .Include(s => s.Series.Chapters)
                 .Select(series => new Series
                 {
                     Id = series.SeriesId,

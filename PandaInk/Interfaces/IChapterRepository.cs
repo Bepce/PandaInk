@@ -6,9 +6,8 @@ namespace PandaInk.API.Interfaces
 {
     public interface IChapterRepository
     {
-        Task<List<ChapterDTO>> GetByIdAsync(Guid seriesId);
         Task CreateAsync(Chapter chapter);
 
-        Task<PageDTO> GetPageByPageNumber(int pageNumber, Guid chapterId);
+        Task<PageDTO> GetPageByPageNumber(int? pageNumber, Guid chapterId);
     }
 }
