@@ -28,7 +28,7 @@ function SeriesPage() {
 
   return (
     <div className="series">
-      <h1>Series</h1>
+      <h1 className="series-pagetitle">Series</h1>
       <div className="series-container">
         {series.map((s) => (
           <div key={s.id} className="series-card">
