@@ -54,7 +54,8 @@ namespace PandaInk.API.Repository
 
         public async Task<Review?> UpdateReviewAsync(UpdateReviewDTO reviewDTO)
         {
-            var existingReview = await _context.Reviews.FirstOrDefaultAsync(r => r.Id == reviewDTO.Id);
+            var existingReview = await _context.Reviews.Where(r => r.Id == reviewDTO.Id).FirstOrDefaultAsync();
+
             if (existingReview == null)
             {
                 return null;

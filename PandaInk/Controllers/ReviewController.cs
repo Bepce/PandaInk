@@ -42,14 +42,20 @@ namespace PandaInk.API.Controllers
         }
 
         [HttpGet("{seriesId}/all")]
-        public async Task<IActionResult> GetAllReviews([FromRoute] Guid id)
+        public async Task<ActionResult<List<ReviewDTO>>> GetAllReviews(Guid seriesId)
         {
-            return Ok();
+            var reviews = await _reviewRepository.GetReviewsBySeriesIdAsync(seriesId);
+
+            if (reviews == null || !reviews.Any())
+            {
+                return NotFound("No reviews found for this series.");
+            }
+
+            return Ok(reviews);
         }
 
 
         [HttpGet("{seriesId}/exists")]
-        
         [Authorize]
         public async Task<bool> CheckUserReview(Guid seriesId)
         {
@@ -67,7 +73,7 @@ namespace PandaInk.API.Controllers
 
             var series = await _seriesRepository.GetSeriesByIdAsync(reviewDTO.SeriesId);
 
-            if(series == null)
+            if (series == null)
             {
                 return BadRequest();
             }
@@ -84,14 +90,12 @@ namespace PandaInk.API.Controllers
 
             await _reviewRepository.CreateReviewAsync(reviewModel);
 
-            return CreatedAtAction(nameof(GetReview), new { id = reviewDTO.SeriesId }, reviewDTO);
+            return Ok();
         }
 
-        // PUT: api/review/{id}
-        [HttpPut]
+        [HttpPut("{reviewId}")]
         [Authorize]
-        [Route("{id}")]
-        public async Task<IActionResult> UpdateReview([FromRoute] Guid id, [FromBody] UpdateReviewDTO reviewDTO)
+        public async Task<IActionResult> UpdateReview([FromBody] UpdateReviewDTO reviewDTO)
         {
             var review = await _reviewRepository.UpdateReviewAsync(reviewDTO);
 
@@ -111,10 +115,9 @@ namespace PandaInk.API.Controllers
             return Ok(review.ToReviewDTO());
         }
 
-        // DELETE: api/review/{id}
         [HttpDelete]
-        [Route("{id}")]
-        public async Task<IActionResult> DeleteReview([FromRoute] Guid id)
+        [Route("{reviewId}")]
+        public async Task<IActionResult> DeleteReview()
         {
             var review = await _reviewRepository.DeleteReviewAsync(id);
 

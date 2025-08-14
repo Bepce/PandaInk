@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { SeriesDetails } from "../types/SeriesDetails";
 import { Review } from "../types/Review"; 
 import "./SeriesDetailsPage.css";
+import { log } from "console";
 
 function SeriesDetailsPage() {
   const { id } = useParams<{ id: string }>();
@@ -15,11 +16,12 @@ function SeriesDetailsPage() {
   const [reviewContent, setReviewContent] = useState("");
   const [reviews, setReviews] = useState<Review[]>([]);
   const [hasReview, setHasReview] = useState(false);
+  const [editingReviewId, setEditingReviewId] = useState<string | null>(null);
 
   async function fetchReviews() {
     if (!id) return;
     try {
-      const res = await fetch(`/api/reviews/${id}/all`);
+      const res = await fetch(`/api/review/${id}/all`);
       if (res.ok) {
         const data: Review[] = await res.json();
         setReviews(data);
@@ -28,6 +30,21 @@ function SeriesDetailsPage() {
       console.error(err);
     }
   }
+
+  async function fetchSeriesDetails() {
+  if (!id) return;
+  const token = localStorage.getItem("token");
+
+  const res = await fetch(`/api/series/${id}`, {
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
+  });
+
+  if (res.ok) {
+    const data: SeriesDetails = await res.json();
+    setSeries(data);
+  }
+}
+
 
   async function checkUserHasReview() {
     if (!id) return;
@@ -48,43 +65,60 @@ function SeriesDetailsPage() {
   }
 
   async function handleSubmitReview() {
-    if (!series) return;
+  if (!series) return;
 
-    const token = localStorage.getItem("token");
-    if (!token) {
-      navigate("/login");
-      return;
-    }
+  const token = localStorage.getItem("token");
+  if (!token) {
+    navigate("/login");
+    return;
+  }
 
-    try {
-      const res = await fetch(`/api/Review`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
+  const method = editingReviewId ? "PUT" : "POST";
+  const url = editingReviewId ? `/api/review/${editingReviewId}` : `/api/review`;
+
+  try {
+    const body = editingReviewId
+      ? {
+          id: editingReviewId,
           content: reviewContent,
           rating: rating,
           createdAt: new Date().toISOString(),
           seriesId: series.id,
-        }),
-      });
+        }
+      : {
+          content: reviewContent,
+          rating: rating,
+          createdAt: new Date().toISOString(),
+          seriesId: series.id,
+        };
 
-      if (res.ok) {
-        setReviewContent("");
-        setRating(0);
-        checkUserHasReview();
-        fetchReviews();
-      } else if (res.status === 401) {
-        navigate("/login");
-      } else {
-        console.error("Failed to submit review");
-      }
-    } catch (err) {
-      console.error(err);
+    const res = await fetch(url, {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(body),
+    });
+
+    if (res.ok) {
+      setReviewContent("");
+      setRating(0);
+      setEditingReviewId(null); // reset edit mode
+      checkUserHasReview();
+      fetchReviews();
+      fetchSeriesDetails();
+    } else if (res.status === 401) {
+      navigate("/login");
+    } else {
+      console.error("Failed to submit review");
     }
+  } catch (err) {
+    console.error(err);
   }
+}
+
+
 
   useEffect(() => {
     let cancelled = false;
@@ -125,10 +159,10 @@ function SeriesDetailsPage() {
           }
         }
 
-        // Fetch reviews
-        fetchReviews();
 
-        // Check if user already has a review
+        fetchReviews();
+        fetchSeriesDetails();
+
         if (token) checkUserHasReview();
       } catch (e) {
         console.error(e);
@@ -180,6 +214,63 @@ function SeriesDetailsPage() {
     }
   }
 
+function getCurrentUsername(): string | null {
+  const token = localStorage.getItem("token");
+  if (!token) return null;
+
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    return payload.given_name || null; 
+  } catch (err) {
+    console.error("Invalid token", err);
+    return null;
+  }
+}
+
+const currentUserName = getCurrentUsername();
+
+
+function handleEditReview(review: Review) {
+  setEditingReviewId(review.id);
+  setReviewContent(review.content);
+  setRating(review.rating);
+  window.scrollTo({ top: 0, behavior: "smooth" }); // scroll to form
+}
+
+async function handleDeleteReview(reviewId: string) {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    navigate("/login");
+    return;
+  }
+
+  const confirmDelete = window.confirm(
+    "Are you sure you want to delete this review? This action cannot be undone."
+  );
+  if (!confirmDelete) return;
+
+  try {
+    const res = await fetch(`/api/review/${reviewId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (res.ok) {
+      fetchReviews();
+      checkUserHasReview();
+    } else if (res.status === 401) {
+      navigate("/login");
+    } else {
+      console.error("Failed to delete review");
+    }
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+
   if (loading) return <p className="loading">Loading series details...</p>;
   if (!series) return <p className="not-found">Series not found</p>;
 
@@ -203,36 +294,36 @@ function SeriesDetailsPage() {
         </div>
       </div>
 
-      {inLibrary && !hasReview && (
-        <div className="review-section card">
-          <h3 className="review-title">Write a Review</h3>
-          <textarea
-            className="review-textarea"
-            value={reviewContent}
-            onChange={(e) => setReviewContent(e.target.value)}
-            placeholder="Write your review..."
-          />
-          <div className="review-footer">
-            <select
-              className="review-rating"
-              value={rating}
-              onChange={(e) => setRating(Number(e.target.value))}
-            >
-              <option value={0}>Not rated</option>
-              <option value={1}>1</option>
-              <option value={2}>2</option>
-              <option value={3}>3</option>
-              <option value={4}>4</option>
-              <option value={5}>5</option>
-            </select>
-            <button className="review-submit" onClick={handleSubmitReview}>
-              Submit
-            </button>
-          </div>
-        </div>
-      )}
+      {inLibrary && (!hasReview || editingReviewId) && (
+  <div className="review-section card">
+    <h3 className="review-title">
+      {editingReviewId ? "Edit Your Review" : "Write a Review"}
+    </h3>
+    <textarea
+      className="review-textarea"
+      value={reviewContent}
+      onChange={(e) => setReviewContent(e.target.value)}
+      placeholder="Write your review..."
+    />
+    <div className="review-footer">
+      <select
+        className="review-rating"
+        value={rating}
+        onChange={(e) => setRating(Number(e.target.value))}
+      >
+        <option value={1}>⭐ 1</option>
+        <option value={2}>⭐⭐ 2</option>
+        <option value={3}>⭐⭐⭐ 3</option>
+        <option value={4}>⭐⭐⭐⭐ 4</option>
+        <option value={5}>⭐⭐⭐⭐⭐ 5</option>
+      </select>
+      <button className="review-submit" onClick={handleSubmitReview}>
+        {editingReviewId ? "Update Review" : "Submit"}
+      </button>
+    </div>
+  </div>
+)}
 
-      {/* Existing chapters */}
       {inLibrary && (
         <div>
           <h2>Chapters</h2>
@@ -245,21 +336,52 @@ function SeriesDetailsPage() {
           </ul>
         </div>
       )}
+      <div className="reviews-list card" style={{ width: "100%", marginTop: "1rem", padding: "1rem" }}>
+  <h3 style={{ marginBottom: "1rem" }}>User Reviews</h3>
+  <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+  {reviews.map((review) => {
+    const isOwner = review.createBy === currentUserName;
 
-      {/* Reviews card */}
-      <div className="reviews-card card">
-        <h3>Reviews</h3>
-        {reviews.length === 0 && <p>No reviews yet.</p>}
-        <ul className="review-list">
-          {reviews.map((rev) => (
-            <li key={rev.id} className="review-item">
-              <p>{rev.userName}</p>
-              <p><strong>Rating:</strong> {rev.rating || "Not rated"}</p>
-              <p>{rev.content}</p>              
-            </li>
-          ))}
-        </ul>
-      </div>
+
+    return (
+      <li
+        key={review.id}
+        style={{
+          borderBottom: "1px solid #e5e5e5",
+          paddingBottom: "0.75rem",
+          marginBottom: "0.75rem",
+        }}
+      >
+        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.25rem" }}>
+          <strong>{review.createBy || "Anonymous"}</strong>
+          <span style={{ fontSize: "0.875rem", color: "#666" }}>
+            {new Date(review.createdAt).toLocaleDateString()}
+          </span>
+        </div>
+        <p style={{ margin: "0.25rem 0" }}>{review.content}</p>
+        {review.rating > 0 && (
+          <span style={{ fontSize: "0.9rem", color: "#f59e0b" }}>
+            {"★".repeat(review.rating)} <span style={{ color: "#999" }}>({review.rating}/5)</span>
+          </span>
+        )}
+        {isOwner && (
+          <div style={{ display: "flex", gap: "0.5rem", marginTop: "0.5rem" }}>
+            <button onClick={() => handleEditReview(review)}>
+              Edit
+            </button>
+            <button
+              onClick={() => handleDeleteReview(review.id)}
+              style={{ color: "red" }}
+            >
+              Delete
+            </button>
+          </div>
+        )}
+      </li>
+    );
+  })}
+</ul>
+</div>
     </div>
   );
 }

@@ -22,6 +22,9 @@ namespace PandaInk.API.DTOs.Review
         public string CreateBy { get; set; } = string.Empty;
 
         [Required]
+        public string userId { get; set; } = string.Empty;
+
+        [Required]
         public Guid SeriesId { get; set; }
     }
 }
