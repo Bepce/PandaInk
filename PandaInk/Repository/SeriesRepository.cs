@@ -50,9 +50,21 @@ namespace PandaInk.API.Repository
 
             if(!string.IsNullOrEmpty(query.SortBy))
             {
-                if (query.SortBy.Equals("ReleaseDate", StringComparison.OrdinalIgnoreCase))
+                if (query.SortBy.Equals("releaseDate", StringComparison.OrdinalIgnoreCase))
                 {
                     series = query.IsDescending ? series.OrderByDescending(s => s.ReleaseDate) : series.OrderBy(s => s.ReleaseDate);
+                }
+                if (query.SortBy.Equals("name", StringComparison.OrdinalIgnoreCase))
+                {
+                    series = query.IsDescending ? series.OrderByDescending(s => s.Title) : series.OrderBy(s => s.Title);
+                }
+                if (query.SortBy.Equals("author", StringComparison.OrdinalIgnoreCase))
+                {
+                    series = query.IsDescending ? series.OrderByDescending(s => s.Author) : series.OrderBy(s => s.Author);
+                }
+                if (query.SortBy.Equals("genre", StringComparison.OrdinalIgnoreCase))
+                {
+                    series = query.IsDescending ? series.OrderByDescending(s => s.Genre) : series.OrderBy(s => s.Genre);
                 }
             }
 

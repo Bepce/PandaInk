@@ -34,3 +34,42 @@
 .remove-btn:hover{
   background-color: rgb(255, 70, 70);
 }
+/* Keep your original styles intact */
+
+/* Add hover effect for series cards */
+.series-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+/* Filter bar styling, doesn't interfere with existing container */
+.series-filters {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.series-filters input,
+.series-filters select,
+.series-filters button {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.series-filters button {
+  background-color: #1890ff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.series-filters button:hover {
+  background-color: #40a9ff;
+}
+
