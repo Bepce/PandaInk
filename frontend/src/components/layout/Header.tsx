@@ -32,7 +32,7 @@ export const Header = () => {
                     </li>
                     <li>
                         {role === "Admin" && (
-                            <Link to="/admin/add-series">Admin</Link>
+                            <Link to="/admin">Admin</Link>
                         )}
                     </li>
                     {isLoggedIn ? (
