@@ -112,7 +112,7 @@ namespace PandaInk.API.Controllers
                 return Unauthorized("You can only update your own reviews.");
             }
 
-            return Ok(review.ToReviewDTO());
+            return Ok(review);
         }
 
         [HttpDelete]
