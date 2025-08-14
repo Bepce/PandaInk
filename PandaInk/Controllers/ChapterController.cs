@@ -34,7 +34,6 @@ namespace PandaInk.API.Controllers
 
             var user = await _userManager.FindByNameAsync(username);
 
-
             var chapter = await _chapterRepository.GetByIdAsync(chapterId);
             if (chapter == null)
             {
