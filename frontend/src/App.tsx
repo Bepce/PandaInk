@@ -7,6 +7,7 @@ import SeriesDetailsPage from "./pages/SeriesDetailsPage";
 import ChapterPage from "./pages/ChapterPage";
 import RegisterPage from "./pages/RegisterPage";
 import AdminPage from "./pages/AdminPage";
+import LibraryPage from "./pages/LibraryPage";
 import './App.css'
 
 function App(){
@@ -18,6 +19,7 @@ function App(){
         <Route path="/series" element = {<SeriesPage />}/>
         <Route path="series/:id" element = {<SeriesDetailsPage />}/>
         <Route path="series/:id/chapter/:id" element = {<ChapterPage />}/>
+        <Route path="/library" element = {<LibraryPage />}/>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/admin" element={<AdminPage />} />
