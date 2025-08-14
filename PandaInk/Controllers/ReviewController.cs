@@ -28,7 +28,7 @@ namespace PandaInk.API.Controllers
         }
 
         // GET: api/review/{seriesId}
-        [HttpGet("{id}")]
+        [HttpGet("{seriesId}")]
         public async Task<ActionResult<Review>> GetReview([FromRoute] Guid id)
         {
             var review = await _reviewRepository.GetReviewsBySeriesIdAsync(id);
@@ -41,7 +41,24 @@ namespace PandaInk.API.Controllers
             return Ok(review);
         }
 
-        // POST: api/review
+        [HttpGet("{seriesId}/all")]
+        public async Task<IActionResult> GetAllReviews([FromRoute] Guid id)
+        {
+            return Ok();
+        }
+
+
+        [HttpGet("{seriesId}/exists")]
+        
+        [Authorize]
+        public async Task<bool> CheckUserReview(Guid seriesId)
+        {
+            var username = User.GetUsername();
+            var user = await _userManager.FindByNameAsync(username);
+
+            return await _reviewRepository.SeriesReviewExistsByUser(user.Id, seriesId);
+        }
+
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> CreateReview([FromBody] CreateReviewDTO reviewDTO)

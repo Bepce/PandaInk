@@ -88,7 +88,7 @@ namespace PandaInk.API.Controllers
             var username = User.GetUsername();
             var user = await _userManager.FindByNameAsync(username);
 
-            return Ok(await _libraryRepository.SeriesExistsInUserLibrary(seriesId, user.Id));
+            return Ok(await _libraryRepository.LibraryEntryExistsAsync(new Library { SeriesId = seriesId, UserId = user.Id}));
         }
     }
 }

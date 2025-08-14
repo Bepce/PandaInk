@@ -25,14 +25,14 @@ namespace PandaInk.API.Repository
         {
             return await _context.Libraries
                 .Where(l => l.UserId == user.Id)
-                .Include(l => l.Series.Chapters)
+                .Include(l => l.Series.Reviews)
                 .Select(l => l.Series.ToSeriesDTO())
                 .ToListAsync();
         }
 
         public async Task<bool> LibraryEntryExistsAsync(Library libraryEntry)
         {
-             return _context.Libraries.Any(l => l.UserId == libraryEntry.UserId && l.SeriesId == libraryEntry.SeriesId);
+             return await _context.Libraries.AnyAsync(l => l.UserId == libraryEntry.UserId && l.SeriesId == libraryEntry.SeriesId);
         }
 
         public async Task RemoveFromLibrary(Library libraryEntry)

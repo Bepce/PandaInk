@@ -30,25 +30,12 @@ namespace PandaInk.API.Repository
                 {
                     Id = c.Id,
                     Title = c.Title,
+                    SeriesId = c.SeriesId,
                     Content = (List<Page?>)c.Content.OrderBy(c => c.PageNumber),
                 })
                 .FirstOrDefaultAsync();
                 
             return result;
-        }
-
-        public async Task<PageDTO?> GetPageByPageNumber(int? pageNumber, Guid chapterId)
-        {
-            var result = await _context.Pages
-                .Where(p => p.ChapterId == chapterId && p.PageNumber == pageNumber)
-                .Select(p => new PageDTO
-                {
-                    PageNumber = p.PageNumber,
-                    ImageUrl = p.ImageUrl
-                })
-                .FirstOrDefaultAsync();
-
-                return result;
         }
     }
 }

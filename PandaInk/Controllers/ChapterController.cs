@@ -25,7 +25,7 @@ namespace PandaInk.API.Controllers
             _libraryRepository = libraryRepository;
         }
 
-        // GET: api/chapter/chapterId
+
         [HttpGet("{chapterId}")]
         [Authorize]
         public async Task<IActionResult> GetChapterById(Guid chapterId)
@@ -41,9 +41,13 @@ namespace PandaInk.API.Controllers
                 return NotFound();
             }
 
-            var isAuthToReadThisChapter = await _libraryRepository.SeriesExistsInUserLibrary(chapter.SeriesId, user.Id);
+           var libraryEntry = await _libraryRepository.LibraryEntryExistsAsync(new Library
+           {
+               SeriesId = chapter.SeriesId,
+               UserId = user.Id
+           });
 
-            if (!isAuthToReadThisChapter)
+            if (!libraryEntry)
             {
                 return Unauthorized("You do not have access to this chapter.");
             }
@@ -51,21 +55,6 @@ namespace PandaInk.API.Controllers
             return Ok(chapter);
         }
 
-        // GET: api/chapter/pageNumber
-        [HttpGet("{chapterId}/{pageNumber}")]
-        [Authorize]
-        public async Task<IActionResult> GetChaptersByPageId(int? pageNumber, Guid chapterId)
-        {
-            if (pageNumber == null) pageNumber = 1;
-            var page = await _chapterRepository.GetPageByPageNumber(pageNumber, chapterId);
-            if (page == null )
-            {
-                return NotFound();
-            }
-            return Ok(page);
-        }
-
-        // POST: api/chapter
         [HttpPost]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateChapter([FromBody] CreateChapterDTO chapterDTO)

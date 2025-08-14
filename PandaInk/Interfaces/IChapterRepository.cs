@@ -8,6 +8,5 @@ namespace PandaInk.API.Interfaces
     {
         Task CreateAsync(Chapter chapter);
         Task<ChapterDTO?> GetByIdAsync(Guid chapterId);
-        Task<PageDTO> GetPageByPageNumber(int? pageNumber, Guid chapterId);
     }
 }
