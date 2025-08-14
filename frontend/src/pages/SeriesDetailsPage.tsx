@@ -85,11 +85,9 @@ function SeriesDetailsPage() {
       }
 
       if (!res.ok) throw new Error("Failed to add to library");
-
-      // Optimistic update
+      
       setInLibrary(true);
 
-      // Optional: refresh series after adding
       const updated = await fetch(`/api/series/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });

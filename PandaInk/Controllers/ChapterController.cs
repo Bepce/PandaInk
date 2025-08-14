@@ -18,11 +18,11 @@ namespace PandaInk.API.Controllers
             _chapterRepository = chapterRepository;
         }
 
-        // GET: api/chapter/{seriesId}
-        [HttpGet("{seriesId}")]
-        public async Task<IActionResult> GetChaptersBySeriesId(Guid seriesId)
+        // GET: api/chapter/{chapterId}
+        [HttpGet("{chapterId}")]
+        public async Task<IActionResult> GetChapterById(Guid chapterId)
         {
-            var chapter = await _chapterRepository.GetByIdAsync(seriesId);
+            var chapter = await _chapterRepository.GetByIdAsync(chapterId);
             if (chapter == null || !chapter.Any())
             {
                 return NotFound();
@@ -31,7 +31,7 @@ namespace PandaInk.API.Controllers
         }
 
         // GET: api/chapter/pageNumber
-        [HttpGet]
+        [HttpGet("{seriesId}/{pageNumber}")]
         [Authorize]
         public async Task<IActionResult> GetChaptersByPageId(int? pageNumber, Guid chapterId)
         {
@@ -63,7 +63,7 @@ namespace PandaInk.API.Controllers
 
             await _chapterRepository.CreateAsync(chapter);
             
-            return CreatedAtAction(nameof(GetChaptersBySeriesId), new { seriesId = chapter.SeriesId }, chapter);
+            return CreatedAtAction(nameof(GetChapterById), new { chapterId = chapter.Id }, chapter);
         }
     }
 }

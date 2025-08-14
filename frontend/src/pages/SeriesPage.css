@@ -27,3 +27,10 @@
 .series{
     text-align: center;
 }
+
+.remove-btn{
+  background-color: rgb(240, 112, 112);
+}
+.remove-btn:hover{
+  background-color: rgb(255, 70, 70);
+}
