@@ -1,0 +1,29 @@
+.series-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.series-card {
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+  text-align: center;
+  padding: 1rem;
+}
+
+.series-cover {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+}
+
+h1{
+    color: white;
+}
+
+.series{
+    text-align: center;
+}

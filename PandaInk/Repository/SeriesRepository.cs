@@ -15,7 +15,7 @@ namespace PandaInk.API.Repository
         {
             _context = context;
         }
-        public async Task<IEnumerable<SeriesDTO>> GetAllSeriesAsync(QueryObject query)
+        public async Task<IEnumerable<SeriesCardDTO>> GetAllSeriesAsync(QueryObject query)
         {
             var series = _context.Series
                 .Include(s => s.Reviews)               
@@ -34,7 +34,7 @@ namespace PandaInk.API.Repository
                 }
             }
 
-            return await series.Select(s => s.ToSeriesDTO()).ToListAsync();
+            return await series.Select(s => s.ToSeriesCardDTO()).ToListAsync();
         }
 
         public async Task<SeriesDTO?> GetSeriesByIdAsync(Guid id)

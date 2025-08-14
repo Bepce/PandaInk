@@ -19,5 +19,18 @@ namespace PandaInk.API.Mappers
                 Chapters = series.Chapters.Select(c => c.ToChapterDTO()).ToList(),
             };
         }
+
+        public static SeriesCardDTO ToSeriesCardDTO(this Series series)
+        {
+            return new SeriesCardDTO
+            {
+                Id = series.Id,
+                Title = series.Title,
+                Genre = series.Genre,
+                CoverImage = series.CoverImage,
+                Author = series.Author,
+                Score = series.Reviews.Any() ? Math.Round(series.Reviews.Average(r => (decimal) r.Rating), 2).ToString() : "No rating yet."
+            };
+        }
     }
 }

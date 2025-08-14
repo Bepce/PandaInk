@@ -5,7 +5,7 @@ namespace PandaInk.API.Interfaces
 {
     public interface ISeriesRepository
     {
-        Task<IEnumerable<SeriesDTO>> GetAllSeriesAsync(QueryObject query);
+        Task<IEnumerable<SeriesCardDTO>> GetAllSeriesAsync(QueryObject query);
 
         Task<SeriesDTO?> GetSeriesByIdAsync(Guid id);
     }
