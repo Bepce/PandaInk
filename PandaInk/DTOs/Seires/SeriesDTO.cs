@@ -6,7 +6,7 @@ namespace PandaInk.API.DTOs.Seires
 {
     public class SeriesDTO
     {
-        [Required]
+
         public Guid Id { get; set; }
         [Required]
         public string Title { get; set; } = string.Empty;
@@ -20,9 +20,7 @@ namespace PandaInk.API.DTOs.Seires
         public string? Author { get; set; }
         [Required]
         public string? ReleaseDate { get; set; }
-
         public string Score { get; set; }
-
         public List<ChapterDTO>? Chapters { get; set; }
     }
 }

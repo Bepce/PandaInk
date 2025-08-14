@@ -5,6 +5,7 @@ using PandaInk.API.DTOs.Seires;
 using PandaInk.API.Helpers;
 using PandaInk.API.Interfaces;
 using PandaInk.API.Mappers;
+using PandaInk.API.Models;
 
 namespace PandaInk.API.Repository
 {
@@ -15,6 +16,27 @@ namespace PandaInk.API.Repository
         {
             _context = context;
         }
+
+        public Task<Series> AddSeries(SeriesDTO series)
+        {
+            var newSeries = new Series
+            {
+                Title = series.Title,
+                Description = series.Description,
+                ReleaseDate = DateTime.Parse(series.ReleaseDate),
+                Genre = series.Genre,
+                CoverImage = series.CoverImage,
+                Author = series.Author,
+                Reviews = new List<Review>(),
+                Chapters = new List<Chapter>()
+            };
+            
+            _context.Series.Add(newSeries);
+            _context.SaveChangesAsync();
+
+            return Task.FromResult(newSeries);
+        }
+
         public async Task<IEnumerable<SeriesCardDTO>> GetAllSeriesAsync(QueryObject query)
         {
             var series = _context.Series
@@ -45,6 +67,12 @@ namespace PandaInk.API.Repository
                 .Include(s => s.Chapters)
                 .Select(s => s.ToSeriesDTO())
                 .FirstOrDefaultAsync();
+        }
+
+        public Task<bool> SeriesExsistByName(string name)
+        {
+            return _context.Series
+                .AnyAsync(s => s.Title.ToLower() == name.ToLower());
         }
     }
 }
