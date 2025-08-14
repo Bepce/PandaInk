@@ -117,9 +117,9 @@ namespace PandaInk.API.Controllers
 
         [HttpDelete]
         [Route("{reviewId}")]
-        public async Task<IActionResult> DeleteReview()
+        public async Task<IActionResult> DeleteReview(Guid reviewId)
         {
-            var review = await _reviewRepository.DeleteReviewAsync(id);
+            var review = await _reviewRepository.DeleteReviewAsync(reviewId);
 
             if (review == null)
             {

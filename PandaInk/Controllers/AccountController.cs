@@ -38,6 +38,7 @@ namespace PandaInk.API.Controllers
                 if(createdUser.Succeeded)
                 {
                     var roleResult = await _userManager.AddToRoleAsync(user, "User");
+                    var roles = await _userManager.GetRolesAsync(user);
                     if (roleResult.Succeeded)
                     {
                         return Ok(
@@ -45,7 +46,8 @@ namespace PandaInk.API.Controllers
                             {
                                 UserName = user.UserName,
                                 Email = user.Email,
-                                Token = _tokenService.CreateToken(user)
+                                Role =  _userManager.GetRolesAsync(user).ToString(),
+                                Token = _tokenService.CreateToken(user, roles)
                             }
                         );
                     }
@@ -83,12 +85,15 @@ namespace PandaInk.API.Controllers
                 if (user == null) return Unauthorized("Invalid username or password.");
                 var result = await _userManager.CheckPasswordAsync(user, loginDTO.Password);
                 if (!result) return Unauthorized("Invalid username or password.");
+                var roles = await _userManager.GetRolesAsync(user);
+
                 return Ok(
                     new NewUserDTO
                     {
                         UserName = user.UserName,
                         Email = user.Email,
-                        Token = _tokenService.CreateToken(user)
+                        Role =  _userManager.GetRolesAsync(user).ToString(),
+                        Token = _tokenService.CreateToken(user, roles)
                     }
                 );
             }
