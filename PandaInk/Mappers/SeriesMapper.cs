@@ -1,5 +1,6 @@
 ﻿using PandaInk.API.DTOs.Seires;
 using PandaInk.API.Models;
+using System.Globalization;
 
 namespace PandaInk.API.Mappers
 {
@@ -14,9 +15,12 @@ namespace PandaInk.API.Mappers
                 Description = series.Description,
                 CoverImage = series.CoverImage,
                 Author = series.Author,
-                ReleaseDate = series.ReleaseDate,
-                Reviews = series.Reviews.Select(r => r.ToReviewDTO()).ToList(),
-                Chapters = series.Chapters.Select(c => c.ToChapterDTO()).ToList(),
+                Genre = series.Genre,
+                ReleaseDate = series.ReleaseDate.HasValue
+                    ? series.ReleaseDate.Value.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)
+                    : null,
+                Reviews = series.Reviews.Any() ? Math.Round(series.Reviews.Average(r => (decimal)r.Rating), 2).ToString() : "No rating yet.",
+                Chapters = series.Chapters.OrderBy(c => c.ChapterNumber).Select(c => c.ToChapterDTO()).ToList(),
             };
         }
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PandaInk.API.Data;
 using PandaInk.API.DTOs.Review;
@@ -34,6 +35,7 @@ namespace PandaInk.API.Controllers
 
         // GET: api/series/{id}
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<Series>> GetSeries(Guid id)
         {
             var series = await _seriesRepository.GetSeriesByIdAsync(id);
@@ -42,6 +44,8 @@ namespace PandaInk.API.Controllers
             {
                 return NotFound();
             }
+
+            series.Chapters.OrderByDescending(c => c.Title);
 
              return Ok(series);
         }

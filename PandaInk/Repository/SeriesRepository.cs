@@ -42,6 +42,7 @@ namespace PandaInk.API.Repository
             return await _context.Series
                 .Where(s => s.Id == id)
                 .Include(s => s.Reviews)
+                .Include(s => s.Chapters)
                 .Select(s => s.ToSeriesDTO())
                 .FirstOrDefaultAsync();
         }

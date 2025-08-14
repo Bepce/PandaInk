@@ -1,13 +1,13 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Header from "./components/layout/Header";
+import { Header } from "./components/layout/Header";
+import { LoginPage } from "./pages/LoginPage";
 import Home from "./pages/Home";
 import SeriesPage from "./pages/SeriesPage";
 import SeriesDetailsPage from "./pages/SeriesDetailsPage";
 import ChapterPage from "./pages/ChapterPage";
-import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import AdminPage from "./pages/AdminPage";
-
+import './App.css'
 
 function App(){
   return(

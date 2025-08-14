@@ -1,7 +1,12 @@
 import {Link} from 'react-router-dom';
+import { useAuth } from '../auth/AuthContext';
 import './Header.css'
-function Header() {
-    return(
+
+export const Header = () => {
+  const { isLoggedIn } = useAuth();
+  const { setToken } = useAuth();
+
+   return(
         <div className="header">
             <nav className="navbar">
                 <ul className="sidebar">
@@ -9,18 +14,21 @@ function Header() {
                        <Link to="/">PandaInk</Link> 
                     </li>
                     <li>
-                        <Link to='/series'>Series</Link>
+                      <Link to="/series">Browse</Link>
                     </li>
-                    <li>
-                        <Link to='/login'>Log in</Link>
-                    </li>
-                    <li>
-                        <Link to='/register'>Register</Link>
-                    </li>
+                    {isLoggedIn ? (
+                        <>
+                            <li><Link to="/library">Library</Link></li>
+                            <li><Link to="/" onClick={() => setToken(null)}>Logout</Link></li>
+                       </>
+                    ) : (
+                        <>
+                            <li><Link to="/login">Login</Link></li>
+                            <li><Link to="/register">Register</Link></li>
+                       </>
+                    )}
                 </ul>
             </nav>
         </div>
-    )
-}
-
-export default Header;
+    );
+};

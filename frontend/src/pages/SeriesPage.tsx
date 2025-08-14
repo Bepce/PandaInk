@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { Series } from '../types/Seires';
 import './SeriesPage.css';
+import { useNavigate } from "react-router-dom";
 
 
 function SeriesPage() {
   const [series, setSeries] = useState<Series[]>([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchSeries() {
@@ -23,6 +25,24 @@ function SeriesPage() {
 
     fetchSeries();
   }, []);
+  
+  const handleClick = async (id: string) => {
+    const token = localStorage.getItem("token");
+    const res = await fetch(`/api/series/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (res.status === 401) {
+      navigate("/login"); // redirect if unauthorized
+      return;
+    }
+
+    if (res.ok) {
+      navigate(`/series/${id}`); // go to series details
+    }
+  };
 
   if (loading) return <p>Loading series...</p>;
 
@@ -31,7 +51,7 @@ function SeriesPage() {
       <h1 className="series-pagetitle">Series</h1>
       <div className="series-container">
         {series.map((s) => (
-          <div key={s.id} className="series-card">
+          <div key={s.id} className="series-card" onClick={() => handleClick(s.id)} style={{cursor: 'pointer'}}>
             <img src={s.coverImage} alt={s.title} className="series-cover" />
             <h3>{s.title}</h3>
             <p>{s.author}</p>

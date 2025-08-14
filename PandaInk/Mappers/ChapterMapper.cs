@@ -11,6 +11,7 @@ namespace PandaInk.API.Mappers
             {
                 Id = chapter.Id,
                 Title = chapter.Title,
+                Content = chapter.Content
             };
         }
     }
