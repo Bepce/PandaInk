@@ -46,6 +46,12 @@ namespace PandaInk.API.Repository
                 .ToListAsync();
         }
 
+        public async Task<bool> SeriesReviewExistsByUser(string userId, Guid seriesId)
+        {
+            return await _context.Reviews
+                .AnyAsync(r => r.UserId == userId && r.SeriesId == seriesId);
+        }
+
         public async Task<Review?> UpdateReviewAsync(UpdateReviewDTO reviewDTO)
         {
             var existingReview = await _context.Reviews.FirstOrDefaultAsync(r => r.Id == reviewDTO.Id);

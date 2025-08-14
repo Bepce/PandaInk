@@ -12,5 +12,7 @@ namespace PandaInk.API.Interfaces
         Task<Review?> UpdateReviewAsync(UpdateReviewDTO reviewDTO);
 
         Task<Review?> DeleteReviewAsync(Guid id);
+
+        Task<bool> SeriesReviewExistsByUser(string userId, Guid seriesId);
     }
 }

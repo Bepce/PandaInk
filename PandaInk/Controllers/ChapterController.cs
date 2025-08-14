@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PandaInk.API.DTOs.Chapter;
+using PandaInk.API.Exntensions;
 using PandaInk.API.Interfaces;
 using PandaInk.API.Models;
 
@@ -12,26 +14,45 @@ namespace PandaInk.API.Controllers
     [Authorize]
     public class ChapterController : ControllerBase
     {
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IChapterRepository _chapterRepository;
-        public ChapterController(IChapterRepository chapterRepository)
+        private readonly ILibraryRepository _libraryRepository;
+
+        public ChapterController(IChapterRepository chapterRepository, UserManager<ApplicationUser> userManager, ILibraryRepository libraryRepository)
         {
             _chapterRepository = chapterRepository;
+            _userManager = userManager;
+            _libraryRepository = libraryRepository;
         }
 
-        // GET: api/chapter/{chapterId}
+        // GET: api/chapter/chapterId
         [HttpGet("{chapterId}")]
+        [Authorize]
         public async Task<IActionResult> GetChapterById(Guid chapterId)
         {
+            var username = User.GetUsername();
+
+            var user = await _userManager.FindByNameAsync(username);
+
+
             var chapter = await _chapterRepository.GetByIdAsync(chapterId);
-            if (chapter == null || !chapter.Any())
+            if (chapter == null)
             {
                 return NotFound();
             }
+
+            var isAuthToReadThisChapter = await _libraryRepository.SeriesExistsInUserLibrary(chapter.SeriesId, user.Id);
+
+            if (!isAuthToReadThisChapter)
+            {
+                return Unauthorized("You do not have access to this chapter.");
+            }
+
             return Ok(chapter);
         }
 
         // GET: api/chapter/pageNumber
-        [HttpGet("{seriesId}/{pageNumber}")]
+        [HttpGet("{chapterId}/{pageNumber}")]
         [Authorize]
         public async Task<IActionResult> GetChaptersByPageId(int? pageNumber, Guid chapterId)
         {

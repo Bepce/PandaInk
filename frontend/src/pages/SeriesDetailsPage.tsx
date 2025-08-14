@@ -10,6 +10,46 @@ function SeriesDetailsPage() {
   const [series, setSeries] = useState<SeriesDetails | null>(null);
   const [loading, setLoading] = useState(true);
   const [inLibrary, setInLibrary] = useState(false);
+  const [rating, setRating] = useState(0);
+  const [reviewContent, setReviewContent] = useState("");
+
+  async function handleSubmitReview() {
+  if (!series) return;
+
+  const token = localStorage.getItem("token");
+  if (!token) {
+    navigate("/login");
+    return;
+  }
+
+  try {
+    const res = await fetch(`/api/Review`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        content: reviewContent,
+        rating: rating,
+        createdAt: new Date().toISOString(),
+        seriesId: series.id,
+      }),
+    });
+
+    if (res.ok) {
+      alert("Review submitted!");
+      setReviewContent(""); 
+    } else if (res.status === 401) {
+      navigate("/login");
+    } else {
+      console.error("Failed to submit review");
+    }
+  } catch (err) {
+    console.error(err);
+  }
+}
+
 
   useEffect(() => {
     let cancelled = false;
@@ -120,6 +160,34 @@ function SeriesDetailsPage() {
               Add to Library
             </button>
           )}
+          {inLibrary && (
+  <div className="review-section card">
+    <h3 className="review-title">Write a Review</h3>
+    <textarea
+      className="review-textarea"
+      value={reviewContent}
+      onChange={(e) => setReviewContent(e.target.value)}
+      placeholder="Write your review..."
+    />
+    <div className="review-footer">
+      <select
+        className="review-rating"
+        value={rating}
+        onChange={(e) => setRating(Number(e.target.value))}
+      >
+        <option value={0}>Not rated</option>
+        <option value={1}>1</option>
+        <option value={2}>2</option>
+        <option value={3}>3</option>
+        <option value={4}>4</option>
+        <option value={5}>5</option>
+      </select>
+      <button className="review-submit" onClick={handleSubmitReview}>
+        Submit
+      </button>
+    </div>
+  </div>
+)}
         </div>
       </div>
 

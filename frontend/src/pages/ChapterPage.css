@@ -1,0 +1,37 @@
+.chapter-page {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 1rem;
+}
+
+.chapter-title {
+  margin-bottom: 1rem;
+}
+
+.chapter-image-container {
+  margin-bottom: 1rem;
+}
+
+.chapter-image {
+  max-width: 100%;
+  height: auto;
+}
+
+.chapter-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.chapter-pagination button {
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.chapter-pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

@@ -10,6 +10,7 @@ namespace PandaInk.API.Mappers
             return new ChapterDTO
             {
                 Id = chapter.Id,
+                SeriesId = chapter.SeriesId,
                 Title = chapter.Title,
                 Content = chapter.Content
             };

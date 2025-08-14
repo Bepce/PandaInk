@@ -80,3 +80,58 @@ h2 {
   margin-top: 3rem;
   color: #ffffff;
 }
+
+.review-section.card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 20px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.review-title {
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.review-textarea {
+  width: 100%;
+  min-height: 80px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  resize: vertical;
+  font-size: 0.95rem;
+  margin-bottom: 10px;
+}
+
+.review-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.review-rating {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 0.95rem;
+}
+
+.review-submit {
+  padding: 8px 16px;
+  border-radius: 8px;
+  background-color: #4f46e5; /* Indigo */
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.review-submit:hover {
+  background-color: #4338ca;
+}
+

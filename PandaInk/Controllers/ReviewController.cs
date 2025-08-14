@@ -16,13 +16,13 @@ namespace PandaInk.API.Controllers
     [ApiController]
     public class ReviewController : ControllerBase
     {
-        private readonly PandaInkContext _context;
+        private readonly ISeriesRepository _seriesRepository;
         private readonly IReviewRepository _reviewRepository;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public ReviewController(PandaInkContext context, IReviewRepository reviewRepo, UserManager<ApplicationUser> userManager)
+        public ReviewController(IReviewRepository reviewRepo, UserManager<ApplicationUser> userManager, ISeriesRepository seriesRepository)
         {
-            _context = context;
+            _seriesRepository = seriesRepository;
             _reviewRepository = reviewRepo;
             _userManager = userManager;
         }
@@ -48,23 +48,26 @@ namespace PandaInk.API.Controllers
         {
             var reviewModel = reviewDTO.ToReviewFromCreateReviewDTO();
 
-            var seriesId = await _context.Series
-                .Where(s => s.Id == reviewDTO.SeriesId)
-                .Select(s => s.Id)
-                .FirstOrDefaultAsync();
+            var series = await _seriesRepository.GetSeriesByIdAsync(reviewDTO.SeriesId);
 
-            if(seriesId == Guid.Empty)
+            if(series == null)
             {
                 return BadRequest();
             }
 
             var username = User.GetUsername();
             var user = await _userManager.FindByNameAsync(username);
+
+            if (await _reviewRepository.SeriesReviewExistsByUser(user.Id, reviewDTO.SeriesId))
+            {
+                return BadRequest("You already wrote a review!");
+            }
+
             reviewModel.UserId = user.Id;
 
             await _reviewRepository.CreateReviewAsync(reviewModel);
 
-            return CreatedAtAction(nameof(GetReview), new { id = seriesId }, reviewDTO);
+            return CreatedAtAction(nameof(GetReview), new { id = reviewDTO.SeriesId }, reviewDTO);
         }
 
         // PUT: api/review/{id}

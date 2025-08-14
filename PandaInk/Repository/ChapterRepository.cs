@@ -20,11 +20,11 @@ namespace PandaInk.API.Repository
             await _context.SaveChangesAsync();
         }
 
-        public async Task<List<ChapterDTO?>> GetByIdAsync(Guid id)
+        public async Task<ChapterDTO?> GetByIdAsync(Guid id)
         {
             var result = await _context.Chapters
                 .Include(c => c.Content)
-                .Where(c => c.SeriesId == id)
+                .Where(c => c.Id == id)
                 .OrderBy(c => c.Title)
                 .Select(c => new ChapterDTO
                 {
@@ -32,7 +32,8 @@ namespace PandaInk.API.Repository
                     Title = c.Title,
                     Content = (List<Page?>)c.Content.OrderBy(c => c.PageNumber),
                 })
-                .ToListAsync();
+                .FirstOrDefaultAsync();
+                
             return result;
         }
 

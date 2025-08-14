@@ -1,9 +1,8 @@
+import { Page } from "./Page";
+
 export interface Chapter {
-  id: string;
-  title: string;
-  seriesId: string;
-  content: string;
-  pageNumber: number;
-  prevChapterId?: string;
-  nextChapterId?: string;
+    id: string;
+    seriesId: string;
+    title: string;
+    content: Page[];
 }
