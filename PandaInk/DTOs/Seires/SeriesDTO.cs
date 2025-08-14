@@ -21,7 +21,7 @@ namespace PandaInk.API.DTOs.Seires
         [Required]
         public string? ReleaseDate { get; set; }
 
-        public string Reviews { get; set; }
+        public string Score { get; set; }
 
         public List<ChapterDTO>? Chapters { get; set; }
     }

@@ -35,12 +35,12 @@ function SeriesPage() {
     });
 
     if (res.status === 401) {
-      navigate("/login"); // redirect if unauthorized
+      navigate("/login"); 
       return;
     }
 
     if (res.ok) {
-      navigate(`/series/${id}`); // go to series details
+      navigate(`/series/${id}`);
     }
   };
 

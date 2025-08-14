@@ -9,5 +9,7 @@ namespace PandaInk.API.Interfaces
         Task AddToLibraryAsync(Library libraryEntry);
         Task<bool> LibraryEntryExistsAsync(Library libraryEntry);
         void RemoveFromLibrary(Library libraryEntry);
+
+        Task<bool> SeriesExistsInUserLibrary(Guid seriesId, string userId);
     }
 }

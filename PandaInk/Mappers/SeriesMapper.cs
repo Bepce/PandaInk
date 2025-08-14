@@ -19,7 +19,7 @@ namespace PandaInk.API.Mappers
                 ReleaseDate = series.ReleaseDate.HasValue
                     ? series.ReleaseDate.Value.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)
                     : null,
-                Reviews = series.Reviews.Any() ? Math.Round(series.Reviews.Average(r => (decimal)r.Rating), 2).ToString() : "No rating yet.",
+                Score = series.Reviews.Any() ? Math.Round(series.Reviews.Average(r => (decimal)r.Rating), 2).ToString() : "No rating yet.",
                 Chapters = series.Chapters.OrderBy(c => c.ChapterNumber).Select(c => c.ToChapterDTO()).ToList(),
             };
         }

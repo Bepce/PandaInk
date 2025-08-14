@@ -6,6 +6,7 @@ using PandaInk.API.Exntensions;
 using PandaInk.API.Interfaces;
 using PandaInk.API.Models;
 using PandaInk.API.Repository;
+using System.Security.Claims;
 
 namespace PandaInk.API.Controllers
 {
@@ -78,6 +79,16 @@ namespace PandaInk.API.Controllers
             }
             _libraryRepository.RemoveFromLibrary(libraryEntry);
             return Ok("Series removed from library successfully.");
+        }
+
+        [HttpGet("{seriesId}")]
+        [Authorize]
+        public async Task<IActionResult> IsInLibrary (Guid seriesId)
+        {
+            var username = User.GetUsername();
+            var user = await _userManager.FindByNameAsync(username);
+
+            return Ok(await _libraryRepository.SeriesExistsInUserLibrary(seriesId, user.Id));
         }
     }
 }
