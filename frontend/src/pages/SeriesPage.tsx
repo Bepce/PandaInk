@@ -33,11 +33,14 @@ function SeriesPage() {
         Authorization: `Bearer ${token}`,
       },
     });
+    
+    if (!res) return
 
     if (res.status === 401) {
       navigate("/login"); 
       return;
     }
+
 
     if (res.ok) {
       navigate(`/series/${id}`);

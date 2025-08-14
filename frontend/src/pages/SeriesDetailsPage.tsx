@@ -133,6 +133,8 @@ function SeriesDetailsPage() {
           headers: token ? { Authorization: `Bearer ${token}` } : {},
         });
 
+        if (!res) return;
+
         if (res.status === 401) {
           navigate("/login");
           return;
@@ -143,7 +145,6 @@ function SeriesDetailsPage() {
         const data: SeriesDetails = await res.json();
         if (!cancelled) setSeries(data);
 
-        // Check if in library
         if (token) {
           const resLib = await fetch(`/api/library/${id}`, {
             headers: { Authorization: `Bearer ${token}` },
@@ -330,7 +331,7 @@ async function handleDeleteReview(reviewId: string) {
           <ul className="chapter-list">
             {series.chapters?.map((chapter) => (
               <li key={chapter.id} className="chapter-item">
-                <Link to={`/chapter/${chapter.id}`}>Chapter {chapter.title}</Link>
+                <Link to={`/chapter/${chapter.id}`}>{chapter.title}</Link>
               </li>
             ))}
           </ul>

@@ -11,49 +11,55 @@ function ChapterPage() {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
 
- useEffect(() => {
-  async function fetchChapter() {
-    if (!chapterId) return;
+  useEffect(() => {
+    async function fetchChapter() {
+      if (!chapterId) return;
 
-    const token = localStorage.getItem("token");
+      const token = localStorage.getItem("token");
 
-    try {
-      const res = await fetch(`/api/chapter/${chapterId}`, {
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
-      });
+      try {
+        const res = await fetch(`/api/chapter/${chapterId}`, {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        });
 
-      if (res.status === 401) {
-        const fallbackSeriesId = "";
-        navigate(`/series/${chapter?.seriesId || fallbackSeriesId}`);
-        return;
-      }
+        if (res.status === 401) {
+          const fallbackSeriesId = "";
+          navigate(`/series/${chapter?.seriesId || fallbackSeriesId}`);
+          return;
+        }
 
-      if (!res.ok) {
-        console.error("Failed to fetch chapter");
+        if (!res.ok) return;
+
+        const data: Chapter = await res.json();
+
+        data.content.sort((a, b) => a?.pageNumber - b?.pageNumber);
+
+        setChapter(data);
+        setCurrentPage(0);
+      } catch (err) {
+        console.error(err);
+      } finally {
         setLoading(false);
-        return;
       }
-
-      const data: Chapter = await res.json();
-
-      data.content.sort((a, b) => a?.pageNumber - b?.pageNumber);
-
-      setChapter(data);
-      setCurrentPage(0);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
     }
-  }
 
-  fetchChapter();
-}, [chapterId, navigate]);
+    fetchChapter();
+  }, [chapterId, navigate]);
 
   if (loading) return <p className="loading">Loading chapter...</p>;
   if (!chapter) return <p className="not-found">Chapter not found</p>;
 
   const totalPages = chapter.content.length;
+
+  if (totalPages === 0) {
+    return (
+      <div className="chapter-page">
+        <h1 className="chapter-title">{chapter.title}</h1>
+        <p>This chapter has not released yet.</p>
+      </div>
+    );
+  }
+
   const page = chapter.content[currentPage];
 
   const handlePrev = () => {

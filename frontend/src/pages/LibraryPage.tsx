@@ -49,7 +49,7 @@ function LibraryPage() {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      if (!res.ok) throw new Error("Failed to remove from library");
+      if (!res.ok) return;
 
       // Refresh library after removal
       fetchLibrary();

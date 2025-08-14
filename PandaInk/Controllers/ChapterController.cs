@@ -64,11 +64,17 @@ namespace PandaInk.API.Controllers
                 return BadRequest(ModelState);
             }
 
+
             var chapter = new Chapter()
             {
                 SeriesId = chapterDTO.SeriesId,
                 Title = chapterDTO.Title,
-                ChapterNumber = chapterDTO.ChapterNumber
+                ChapterNumber = chapterDTO.ChapterNumber,
+                Content = chapterDTO.Content.Select(p => new Page
+                {
+                    ImageUrl = p.ImageUrl,
+                    PageNumber = p.PageNumber
+                }).ToList()
             };
 
             await _chapterRepository.CreateAsync(chapter);

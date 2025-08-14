@@ -49,7 +49,8 @@ namespace PandaInk.API.Data
             modelBuilder.Entity<Chapter>()
                 .HasMany(c => c.Content)
                 .WithOne(p => p.Chapter)
-                .HasForeignKey(p => p.ChapterId);
+                .HasForeignKey(p => p.ChapterId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             SeedUser(modelBuilder);
             SeedSeries(modelBuilder);
